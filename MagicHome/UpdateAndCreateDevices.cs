@@ -631,6 +631,176 @@ namespace HSPI_MagicHome
             });
             this.SetDeviceVersion(device, Assembly.GetEntryAssembly().GetName().Version);
         }
+
+        private DeviceClass CreateMagicHomeWarmWhiteDevice(DeviceFindResult discovery, Device dev, DeviceStatus devStatus, DeviceClass rootDev)
+        {
+            DeviceClass device = this.CreateDevice(discovery.MacAddress + " Warm White",
+                discovery.MacAddress + " Warm White", discovery.MacAddress.ToString(), true, false, rootDev);
+            Logger.LogDebug("Existing Device Not Found Creating Device " + discovery.MacAddress + " in HomeSeer");
+            this.UpdateMagicHomeWarmWhiteVsvgPairs(device, discovery, dev, devStatus);
+            return device;
+        }
+
+        private void UpdateMagicHomeWarmWhiteVsvgPairs(DeviceClass device, DeviceFindResult discovery, Device dev, DeviceStatus devstatus)
+        {
+            if (device == null)
+                return;
+            Logger.LogDebug("Updating Device " + device.get_Name(MHs) + " Value Pairs");
+            Version deviceVersion = this.GetDeviceVersion(device);
+            if (!(deviceVersion == (Version)null) && !(deviceVersion < Assembly.GetEntryAssembly().GetName().Version))
+                return;
+            DeviceTypeInfo_m.DeviceTypeInfo deviceTypeInfo = new DeviceTypeInfo_m.DeviceTypeInfo();
+            deviceTypeInfo.Device_API = DeviceTypeInfo_m.DeviceTypeInfo.eDeviceAPI.Plug_In;
+            deviceTypeInfo.Device_Type = (int)DeviceTypeInfo_m.DeviceTypeInfo.eDeviceAPI.Plug_In;
+            deviceTypeInfo.Device_SubType = (int)DeviceTypeInfo_m.DeviceTypeInfo.eDeviceAPI.No_API;
+            device.set_DeviceType_Set(this.MHs, deviceTypeInfo);
+            var num = device.get_Ref(this.MHs);
+            this.MHs.DeviceVSP_ClearAll(num, true);
+            this.MHs.DeviceVGP_ClearAll(num, true);
+            device.set_Address(MHs, discovery.MacAddress + "-warmwhite");
+
+            this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Both)
+            {
+                PairType = VSVGPairs.VSVGPairType.Range,
+                RangeStart = 0,
+                RangeEnd = 255,
+                IncludeValues = true,
+                RangeStatusDecimals = 0,
+                RangeStatusPrefix = "",
+                RangeStatusSuffix = "",
+                HasScale = false,
+                Render = Enums.CAPIControlType.ValuesRangeSlider,
+                ControlUse = ePairControlUse.Not_Specified,
+                ValueOffset = 0,
+                Render_Location = new Enums.CAPIControlLocation()
+                {
+                    Row = 1,
+                    Column = 1,
+                    ColumnSpan = 0
+                }
+            });
+            this.MHs.DeviceVGP_AddPair(num, new VSVGPairs.VGPair()
+            {
+                PairType = VSVGPairs.VSVGPairType.Range,
+                Graphic = "images/HomeSeer/status/white-warm.png",
+                RangeStart = 0,
+                RangeEnd = 255
+            });
+            this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Control)
+            {
+                PairType = VSVGPairs.VSVGPairType.SingleValue,
+                Status = "Up",
+                Value = 256,
+                Render = Enums.CAPIControlType.Button,
+                ControlUse = ePairControlUse.Not_Specified,
+                Render_Location = new Enums.CAPIControlLocation()
+                {
+                    Row = 1,
+                    Column = 3,
+                    ColumnSpan = 0
+                }
+            });
+            this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Control)
+            {
+                PairType = VSVGPairs.VSVGPairType.SingleValue,
+                Status = "Down",
+                Value = 257,
+                Render = Enums.CAPIControlType.Button,
+                ControlUse = ePairControlUse.Not_Specified,
+                Render_Location = new Enums.CAPIControlLocation()
+                {
+                    Row = 1,
+                    Column = 2,
+                    ColumnSpan = 0
+                }
+            });
+            this.SetDeviceVersion(device, Assembly.GetEntryAssembly().GetName().Version);
+        }
+
+        private DeviceClass CreateMagicHomeCoolWhiteDevice(DeviceFindResult discovery, Device dev, DeviceStatus devStatus, DeviceClass rootDev)
+        {
+            DeviceClass device = this.CreateDevice(discovery.MacAddress + " Cool White",
+                discovery.MacAddress + " Cool White", discovery.MacAddress.ToString(), true, false, rootDev);
+            Logger.LogDebug("Existing Device Not Found Creating Device " + discovery.MacAddress + " in HomeSeer");
+            this.UpdateMagicHomeWarmWhiteVsvgPairs(device, discovery, dev, devStatus);
+            return device;
+        }
+
+        private void UpdateMagicHomeCoolWhiteVsvgPairs(DeviceClass device, DeviceFindResult discovery, Device dev, DeviceStatus devstatus)
+        {
+            if (device == null)
+                return;
+            Logger.LogDebug("Updating Device " + device.get_Name(MHs) + " Value Pairs");
+            Version deviceVersion = this.GetDeviceVersion(device);
+            if (!(deviceVersion == (Version)null) && !(deviceVersion < Assembly.GetEntryAssembly().GetName().Version))
+                return;
+            DeviceTypeInfo_m.DeviceTypeInfo deviceTypeInfo = new DeviceTypeInfo_m.DeviceTypeInfo();
+            deviceTypeInfo.Device_API = DeviceTypeInfo_m.DeviceTypeInfo.eDeviceAPI.Plug_In;
+            deviceTypeInfo.Device_Type = (int)DeviceTypeInfo_m.DeviceTypeInfo.eDeviceAPI.Plug_In;
+            deviceTypeInfo.Device_SubType = (int)DeviceTypeInfo_m.DeviceTypeInfo.eDeviceAPI.No_API;
+            device.set_DeviceType_Set(this.MHs, deviceTypeInfo);
+            var num = device.get_Ref(this.MHs);
+            this.MHs.DeviceVSP_ClearAll(num, true);
+            this.MHs.DeviceVGP_ClearAll(num, true);
+            device.set_Address(MHs, discovery.MacAddress + "-coolwhite");
+
+            this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Both)
+            {
+                PairType = VSVGPairs.VSVGPairType.Range,
+                RangeStart = 0,
+                RangeEnd = 255,
+                IncludeValues = true,
+                RangeStatusDecimals = 0,
+                RangeStatusPrefix = "",
+                RangeStatusSuffix = "",
+                HasScale = false,
+                Render = Enums.CAPIControlType.ValuesRangeSlider,
+                ControlUse = ePairControlUse.Not_Specified,
+                ValueOffset = 0,
+                Render_Location = new Enums.CAPIControlLocation()
+                {
+                    Row = 1,
+                    Column = 1,
+                    ColumnSpan = 0
+                }
+            });
+            this.MHs.DeviceVGP_AddPair(num, new VSVGPairs.VGPair()
+            {
+                PairType = VSVGPairs.VSVGPairType.Range,
+                Graphic = "images/HomeSeer/status/white-cool.png",
+                RangeStart = 0,
+                RangeEnd = 255
+            });
+            this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Control)
+            {
+                PairType = VSVGPairs.VSVGPairType.SingleValue,
+                Status = "Up",
+                Value = 256,
+                Render = Enums.CAPIControlType.Button,
+                ControlUse = ePairControlUse.Not_Specified,
+                Render_Location = new Enums.CAPIControlLocation()
+                {
+                    Row = 1,
+                    Column = 3,
+                    ColumnSpan = 0
+                }
+            });
+            this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Control)
+            {
+                PairType = VSVGPairs.VSVGPairType.SingleValue,
+                Status = "Down",
+                Value = 257,
+                Render = Enums.CAPIControlType.Button,
+                ControlUse = ePairControlUse.Not_Specified,
+                Render_Location = new Enums.CAPIControlLocation()
+                {
+                    Row = 1,
+                    Column = 2,
+                    ColumnSpan = 0
+                }
+            });
+            this.SetDeviceVersion(device, Assembly.GetEntryAssembly().GetName().Version);
+        }
         
         private DeviceClass CreateMagicHomePresetDevice(DeviceFindResult discovery, Device dev, DeviceStatus devStatus, DeviceClass rootDev)
         {
