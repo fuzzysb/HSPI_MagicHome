@@ -99,7 +99,10 @@ namespace HSPI_MagicHome
                     }
                     else if (current != null)
                     {
-                        this._mObjApp.SetControlValue(current.Ref, current.ControlValue);
+                        if (current.ControlValue > 0)
+                        {
+                            this._mObjApp.SetControlValue(current.Ref, current.ControlValue);
+                        }
                     }
                 }
             }
@@ -127,12 +130,12 @@ namespace HSPI_MagicHome
 
         public override string ActionBuildUI(string uniqueControlId, IPlugInAPI.strTrigActInfo actionInfo)
         {
-            return "";
+            return _mObjApp.Actions.ActionBuildUI(uniqueControlId, actionInfo);
         }
 
         public override bool ActionConfigured(IPlugInAPI.strTrigActInfo actionInfo)
         {
-            return true;
+            return _mObjApp.Actions.ActionConfigured(actionInfo);
         }
 
         public override int ActionCount()
@@ -142,23 +145,23 @@ namespace HSPI_MagicHome
 
         public override string ActionFormatUI(IPlugInAPI.strTrigActInfo actionInfo)
         {
-            return "";
+            return _mObjApp.Actions.ActionFormatUI(actionInfo);
         }
 
         public override IPlugInAPI.strMultiReturn ActionProcessPostUI(NameValueCollection postData,
             IPlugInAPI.strTrigActInfo actionInfo)
         {
-            return new IPlugInAPI.strMultiReturn();
+            return _mObjApp.Actions.ActionProcessPostUI(postData, actionInfo);
         }
 
         public override bool ActionReferencesDevice(IPlugInAPI.strTrigActInfo actionInfo, int deviceId)
         {
-            return false;
+            return _mObjApp.Actions.ActionReferencesDevice(actionInfo, deviceId);
         }
 
         public override string get_ActionName(int actionNumber)
         {
-            return "";
+            return _mObjApp.Actions.get_ActionName(actionNumber);
         }
 
         public override bool get_Condition(IPlugInAPI.strTrigActInfo actionInfo)
@@ -219,7 +222,7 @@ namespace HSPI_MagicHome
 
         public override bool HandleAction(IPlugInAPI.strTrigActInfo actionInfo)
         {
-            return false;
+            return _mObjApp.Actions.HandleAction(actionInfo);
         }
 
         public override void set_Condition(IPlugInAPI.strTrigActInfo actionInfo, bool value)

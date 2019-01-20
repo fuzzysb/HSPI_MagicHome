@@ -374,6 +374,18 @@ namespace HSPI_MagicHome
                     ColumnSpan = 0
                 }
             });
+            this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Control)
+            {
+                PairType = VSVGPairs.VSVGPairType.SingleValue,
+                Value = 16777218,
+                Render_Location = new Enums.CAPIControlLocation()
+                {
+                    Row = 0,
+                    Column = 0,
+                    ColumnSpan = 0
+                },
+                ControlUse = ePairControlUse._ColorControl
+            });
             this.SetDeviceVersion(device, Assembly.GetEntryAssembly().GetName().Version);
         }
 

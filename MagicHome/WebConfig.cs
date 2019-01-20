@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
+using MagicHomeAPI;
 using Scheduler;
 // ReSharper disable IdentifierTypo
 // ReSharper disable StringLiteralsWordIsNotInDictionary
@@ -59,10 +61,37 @@ namespace HSPI_MagicHome
             var stringBuilder = new StringBuilder();
             stringBuilder.AppendLine("<table cellspacing='0' cellpadding='5'  width='100%'><tr>");
             stringBuilder.AppendLine("<tr><td class='tableheader' colspan='7'>MagicHome settings</td>");
-            stringBuilder.AppendLine(
-                    "The MagicHome plugin requires no configuration, all MagicHome Lights will be discovered and devices will be created.");
-            stringBuilder.AppendLine("</td>");
             stringBuilder.AppendLine("</tr>");
+            if (MagicHomeApp.deviceFindResults == null || MagicHomeApp.deviceFindResults.Length < 1)
+            {
+                stringBuilder.AppendLine("<td class='tablecell' colspan='7'>");
+                stringBuilder.AppendLine(
+                    "No devices found, or the plugin has not completed the initial discovery, please view this page once the initial discovery has been completed to set device options.");
+                stringBuilder.AppendLine("</td>");
+            }
+            else
+            {
+                List<clsJQuery.jqDropList> deviceDropDowns = new List<clsJQuery.jqDropList>();
+                foreach (var discovery in MagicHomeApp.deviceFindResults)
+                {
+                    stringBuilder.AppendLine("<tr><td class='tablecell' align='left' style='width:200px'>");
+                    stringBuilder.AppendLine("Device: " + discovery.MacAddress);
+                    stringBuilder.AppendLine("</td>");
+                    stringBuilder.AppendLine("<td class='tablecell' align='left'>");
+                    deviceDropDowns.Add(new clsJQuery.jqDropList(discovery.MacAddress.ToString(), PageName, false));
+                    var dropvalues = Enum.GetValues(typeof(DeviceType));
+                    foreach (DeviceType deviceType in dropvalues)
+                    {
+                        deviceDropDowns.Find(x => x.name == discovery.MacAddress.ToString()).AddItem(deviceType.ToString(), ((int)deviceType).ToString(),
+                            deviceType.Description() == hs.GetINISetting("MAGICHOME", discovery.MacAddress.ToString(), "", m_objApp.IniFile));
+                    }
+                    stringBuilder.AppendLine(deviceDropDowns.Find(x => x.name == discovery.MacAddress.ToString()).Build());
+                    stringBuilder.AppendLine("</td></tr>");
+
+                }
+            }
+            
+            
             stringBuilder.AppendLine("<tr><td class='tableheader' colspan='7'>Log settings</td>");
             stringBuilder.AppendLine("<tr>");
             stringBuilder.AppendLine("<td class='tablecell' align='left' style='width:200px'>");
