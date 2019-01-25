@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -36,18 +37,42 @@ namespace MagicHomeAPI
 
                 public DeviceFindEnumerator(EndPoint endPoint, int timeoutMs)
                 {
-                    _endPoint = endPoint;
+                    _foundDevices = new HashSet<DeviceFindResult>();
+                    var nics = NetworkInterface.GetAllNetworkInterfaces();
+                    foreach (var adapter in nics)
+                    {
+                        if (adapter.NetworkInterfaceType != NetworkInterfaceType.Ethernet) { continue; }
+                        if (adapter.Supports(NetworkInterfaceComponent.IPv4) == false) { continue; }
 
-                    _socket = new Socket(endPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
-                    _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
+                        try
+                        {
+                            var adapterProperties = adapter.GetIPProperties();
+                            foreach (var ua in adapterProperties.UnicastAddresses)
+                            {
+                                if (ua.Address.AddressFamily == AddressFamily.InterNetwork)
+                                {
+                                    _endPoint = endPoint;
 
-                    _socket.ReceiveTimeout = timeoutMs / ReceiveTriesTotal / SendTriesTotal;
+                                    _socket = new Socket(endPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
+                                    _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
 
-                    _foundDevices = new HashSet<DeviceFindResult>(DeviceFindResult.MacAddressEqualityComparer);
+                                    _socket.ReceiveTimeout = timeoutMs / ReceiveTriesTotal / SendTriesTotal;
+                                    
+                                    //_foundDevices = new HashSet<DeviceFindResult>(DeviceFindResult.MacAddressEqualityComparer);
+                                    _foundDevices.UnionWith(new HashSet<DeviceFindResult>(DeviceFindResult.MacAddressEqualityComparer)); 
+                                    
+                                    _endTime = DateTime.UtcNow.AddMilliseconds(timeoutMs);
 
-                    _endTime = DateTime.UtcNow.AddMilliseconds(timeoutMs);
+                                    _tryReceiveNextTime = false;
+                                }
+                            }
+                        }
+                        catch(Exception ex)
+                        {
+                            //ignored
+                        }
+                    }
 
-                    _tryReceiveNextTime = false;
                 }
 
                 public bool MoveNext()

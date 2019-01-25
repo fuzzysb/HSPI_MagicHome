@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DevDetail.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="DeviceExtensions.cs" />
     <Compile Include="DeviceFinder.cs" />

@@ -2,6 +2,9 @@
 HSPI_MagicHome.exe,.,0
 HSPI_MagicHome.exe.config,.,0
 MagicHomeAPI.dll,.\bin\MagicHome,0
+MoreLinq.dll,.\bin\MagicHome,0
 Newtonsoft.Json.dll,.\bin\MagicHome,0
 CommandLine.dll,.\bin\MagicHome,0
 Hspi.dll,.\bin\MagicHome,0
+System.Reflection.TypeExtensions.dll,.\bin\MagicHome,0
+System.ValueTuple.dll,.\bin\MagicHome,0

@@ -16,6 +16,8 @@ namespace HSPI_MagicHome
     public class Actions
     {
 
+        MagicHomeApp instance = MagicHomeApp.GetInstance();
+
         private static readonly List<ActionType> s_actionTypeList = new List<ActionType>()
         {
             new ActionType("Set Colour")
@@ -28,7 +30,6 @@ namespace HSPI_MagicHome
         public string ActionBuildUI(string sUnique, IPlugInAPI.strTrigActInfo actInfo)
         {
             var stringBuilder = new StringBuilder();
-            var instance = MagicHomeApp.GetInstance();
             var str1 = actInfo.UID.ToString() + sUnique;
             var actionType = "";
             var str2 = "";
@@ -101,7 +102,7 @@ namespace HSPI_MagicHome
 
         public bool ActionConfigured(IPlugInAPI.strTrigActInfo actInfo)
         {
-            var instance = MagicHomeApp.GetInstance();
+            
             if (actInfo.DataIn == null)
                 return false;
             var act = "";
@@ -147,7 +148,6 @@ namespace HSPI_MagicHome
         {
             if (actInfo.DataIn == null)
                 return "Error, actInfo.DataIn is null";
-            var instance = MagicHomeApp.GetInstance();
             var str1 = "";
             var act = "";
             var key = "";
@@ -212,7 +212,6 @@ namespace HSPI_MagicHome
             {
                 if (actionType != null)
                 {
-                    var instance = MagicHomeApp.GetInstance();
                     if (instance.regMod == Enums.REGISTRATION_MODES.REG_REGISTERED || instance.regMod == Enums.REGISTRATION_MODES.REG_TRIAL)
                     {
                         if (actionType.Name == "Set Colour")
@@ -226,14 +225,14 @@ namespace HSPI_MagicHome
                                         var hsDev = instance.FindDeviceById(discovery.MacAddress + " Colour", discovery.MacAddress.ToString());
                                         if (light == hsDev.get_Name(instance.Hs))
                                         {
-                                            Device dev = instance.GetDevice(discovery);
-                                            var devStatus = dev.GetStatus();
+                                            var devdetail = instance.DevDetailsList.Find(x => x.Mac == discovery.MacAddress.ToString());
+                                            var devStatus = devdetail.DevStatus;
                                             var colours = MagicHomeApp.ConvertToRgb(colour);
                                             var cwwhite = devStatus.White1;
                                             var ccwhite = devStatus.White2;
-                                            dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, (dev._deviceType == DeviceType.RgbWarmwhite || dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true);
-                                            devStatus = dev.GetStatus();
-                                            instance.UpdateMagicHomeDevice(discovery, dev, devStatus);
+                                            devdetail.Dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true);
+                                            devStatus = devdetail.Dev.GetStatus();
+                                            instance.UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                         }
                                     }
                                 }
