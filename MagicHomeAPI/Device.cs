@@ -79,9 +79,16 @@ namespace MagicHomeAPI
         public void SetPowerState(PowerState state)
         {
             if (_deviceType == DeviceType.LegacyBulb)
-                SendMessage(new byte[] { 0xCC, (byte)state, 0x33 }, false, true);
+            {
+                SendMessage(new byte[] { 0xCC, (byte)state, 0x33 }, false, false);
+
+                
+            }
             else
-                SendMessage(new byte[] { 0x71, (byte)state, 0x0F }, true, true);
+            {   
+                SendMessage(new byte[] { 0x71, (byte)state, 0x0F }, true, false);
+            }
+                
         }
 
         public void TurnOn()
@@ -137,7 +144,8 @@ namespace MagicHomeAPI
             }
 
 
-            SendMessage(message, sendChecksum, waitForResponse);
+            SendMessage(message, sendChecksum, false);
+
         }
 
         public void SetPreset(PresetMode presetMode, byte delay)
@@ -149,11 +157,11 @@ namespace MagicHomeAPI
 
             if (_deviceType == DeviceType.LegacyBulb)
             {
-                SendMessage(new byte[] { 0xBB, (byte)presetMode, delay, 0x44 }, false, true);
+                SendMessage(new byte[] { 0xBB, (byte)presetMode, delay, 0x44 }, false, false);
             }
             else
             {
-                SendMessage(new byte[] { 0x61, (byte)presetMode, delay, 0x0F }, true, true);
+                SendMessage(new byte[] { 0x61, (byte)presetMode, delay, 0x0F }, true, false);
             }
         }
 
@@ -284,29 +292,55 @@ namespace MagicHomeAPI
             const int maxSendRetries = 10;
             var retries = 0;
 
-            while (true)
+            while (retries <= maxSendRetries)
             {
                 _socket.Send(bytes);
 
                 if (!waitForResponse)
+                {
+                    _socket.Disconnect(true);
                     return null;
+                }
+                    
 
                 try
                 {
+                    while (!_socket.Connected)
+                    {
+
+                    }
+
+                    if (_deviceType == DeviceType.LegacyBulb)
+                    {
+                        while (_socket.Available < 12)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        while (_socket.Available < 14)
+                        {
+
+                        }
+                    }
                     int readBytes = _socket.Receive(buffer);
-
                     Array.Resize(ref buffer, readBytes);
-
                     return buffer;
+
                 }
                 catch (SocketException ex)
                 {
                     if (ex.SocketErrorCode != SocketError.TimedOut || retries >= maxSendRetries)
+                    {
                         throw;
+                    }
                     retries++;
                     Thread.Sleep(10);
                 }
             }
+
+            return null;
         }
 
         private byte CalculateChecksum(byte[] bytes)

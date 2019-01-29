@@ -99,6 +99,9 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Net.IPNetwork, Version=2.2.0.78, Culture=neutral, PublicKeyToken=717343cc2c25edcf, processorArchitecture=MSIL">
+      <HintPath>..\packages\IPNetwork2.2.2.0.78\lib\net46\System.Net.IPNetwork.dll</HintPath>
+    </Reference>
     <Reference Include="System.Reflection, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Reflection.4.3.0\lib\net462\System.Reflection.dll</HintPath>
       <Private>True</Private>
@@ -170,7 +173,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Enabled="0" Reactor_Commands="" Reactor_Project="E:\Git\HSPI_MagicHome\MagicHome\MagicHome.nrproj" Reactor_Configuration="Release" Reactor_Output="E:\Git\HSPI_MagicHome\MagicHome\bin\Release\HSPI_MagicHome_Secure\HSPI_MagicHome.exe" Reactor_Deploy="0" />
+      <UserProperties Reactor_Deploy="0" Reactor_Output="E:\Git\HSPI_MagicHome\MagicHome\bin\Release\HSPI_MagicHome_Secure\HSPI_MagicHome.exe" Reactor_Configuration="Release" Reactor_Project="E:\Git\HSPI_MagicHome\MagicHome\MagicHome.nrproj" Reactor_Commands="" Reactor_Enabled="0" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>

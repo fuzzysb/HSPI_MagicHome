@@ -29,7 +29,7 @@ namespace HSPI_MagicHome
                 byte[] postBytes = Encoding.UTF8.GetBytes(json);
                 httpWebRequest.ContentLength = postBytes.Length;
                 var requestStream = httpWebRequest.GetRequestStream();
-                requestStream.Write(postBytes, 0, postBytes.Length);
+                requestStream.WriteAsync(postBytes, 0, postBytes.Length);
                 requestStream.Close();
                 var httpResponse = (HttpWebResponse)httpWebRequest.GetResponse();
                 using (var streamReader =

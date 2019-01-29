@@ -401,13 +401,19 @@ namespace HSPI_MagicHome
                                             case "mode":
                                                 if (buttonName == "On")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "Setting Device " + devdetail.Mac + "'s power state to On");
                                                     devdetail.Dev.SetPowerState(PowerState.PowerOn);
+
                                                 }
 
                                                 if (buttonName == "Off")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "Setting Device " + devdetail.Mac + "'s power state to Off");
                                                     devdetail.Dev.SetPowerState(PowerState.PowerOff);
                                                 }
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -421,14 +427,19 @@ namespace HSPI_MagicHome
                                                 var rcwhite = devStatus.White2;
                                                 if (buttonName == "Up")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "increasing Device " + devdetail.Mac + "'s Red Value");
                                                     rred = ((int)rred < 255) ? (byte)((int)rred + 1) : rred;
                                                 }
 
                                                 if (buttonName == "Down")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "decreasing Device " + devdetail.Mac + "'s Red Value");
                                                     rred = ((int)rred > 0) ? (byte)((int)rred - 1) : rred;
                                                 }
                                                 devdetail.Dev.SetColor((byte)rred, (byte)rgreen, (byte)rblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true);
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -440,14 +451,19 @@ namespace HSPI_MagicHome
                                                 var gcwhite = devStatus.White2;
                                                 if (buttonName == "Up")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "increasing Device " + devdetail.Mac + "'s Green Value");
                                                     ggreen = ((int)ggreen < 255) ? (byte)((int)ggreen + 1) : ggreen;
                                                 }
 
                                                 if (buttonName == "Down")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "decreasing Device " + devdetail.Mac + "'s Green Value");
                                                     ggreen = ((int)ggreen > 0) ? (byte)((int)ggreen - 1) : ggreen;
                                                 }
                                                 devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true);
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -459,11 +475,15 @@ namespace HSPI_MagicHome
                                                 var bcwhite = devStatus.White2;
                                                 if (buttonName == "Up")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "increasing Device " + devdetail.Mac + "'s Blue Value");
                                                     bblue = ((int)bblue < 255) ? (byte)((int)bblue + 1) : bblue;
                                                 }
 
                                                 if (buttonName == "Down")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "decreasing Device " + devdetail.Mac + "'s Blue Value");
                                                     bblue = ((int)bblue > 0) ? (byte)((int)bblue - 1) : bblue;
                                                 }
                                                 devdetail.Dev.SetColor((byte)bred, (byte)bgreen, (byte)bblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true);
@@ -478,14 +498,19 @@ namespace HSPI_MagicHome
                                                 var w1cwhite = devStatus.White2;
                                                 if (buttonName == "Up")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "increasing Device " + devdetail.Mac + "'s Warm White Value");
                                                     w1wwhite = ((int)w1wwhite < 255) ? (byte)((int)w1wwhite + 1) : w1wwhite;
                                                 }
 
                                                 if (buttonName == "Down")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "decreasing Device " + devdetail.Mac + "'s Warm White Value");
                                                     w1wwhite = ((int)w1wwhite > 0) ? (byte)((int)w1wwhite - 1) : w1wwhite;
                                                 }
                                                 devdetail.Dev.SetColor((byte)w1red, (byte)w1green, (byte)w1blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true);
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -497,14 +522,19 @@ namespace HSPI_MagicHome
                                                 var w2cwhite = devStatus.White2;
                                                 if (buttonName == "Up")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "increasing Device " + devdetail.Mac + "'s Cool White Value");
                                                     w2cwhite = ((int)w2cwhite < 255) ? (byte)((int)w2cwhite + 1) : w2cwhite;
                                                 }
 
                                                 if (buttonName == "Down")
                                                 {
+                                                    Logger.LogDebug(
+                                                        "decreasing Device " + devdetail.Mac + "'s Cool White Value");
                                                     w2cwhite = ((int)w2cwhite > 0) ? (byte)((int)w2cwhite - 1) : w2cwhite;
                                                 }
                                                 devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true);
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -512,112 +542,175 @@ namespace HSPI_MagicHome
                                                 switch (buttonName)
                                                     {
                                                         case "RGB Fade":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s RGB Fade Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.RgbFade,0);
-                                                            var p1devStatus = devdetail.Dev.GetStatus();
+                                                            Thread.Sleep(1000);
+                                                        var p1devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p1devStatus);
                                                         return;
                                                         case "Red Pulse":
-                                                            devdetail.Dev.SetPreset(PresetMode.RedPulse, 0);
-                                                            var p2devStatus = devdetail.Dev.GetStatus();
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Red Pulse Preset");
+                                                        devdetail.Dev.SetPreset(PresetMode.RedPulse, 0);
+                                                            Thread.Sleep(1000);
+                                                        var p2devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p2devStatus);
                                                         return;
                                                         case "Green Pulse":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Green Pulse Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.GreenPulse, 0);
-                                                            var p3devStatus = devdetail.Dev.GetStatus();
+                                                            Thread.Sleep(1000);
+                                                        var p3devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p3devStatus);
                                                         return;
                                                         case "Blue Pulse":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Blue Pulse Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.BluePulse, 0);
                                                             var p4devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p4devStatus);
                                                         return;
                                                         case "Yellow Pulse":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Yellow Pulse Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.YellowPulse, 0);
+                                                            Thread.Sleep(1000);
                                                             var p5devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p5devStatus);
                                                         return;
                                                         case "Cyan Pulse":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Cyan Pulse Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.CyanPulse, 0);
+                                                            Thread.Sleep(1000);
                                                             var p6devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p6devStatus);
                                                         return;
                                                         case "Violet Pulse":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Violet Pulse Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.VioletPulse, 0);
+                                                            Thread.Sleep(1000);
                                                             var p7devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p7devStatus);
                                                         return;
                                                         case "White Pulse":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s White Pulse Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.WhitePulse, 0);
+                                                            Thread.Sleep(1000);
                                                             var p8devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p8devStatus);
                                                         return;
                                                         case "Red Green Alternate Pulse":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Red Green Alternate Pulse Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.RedGreenAlternatePulse, 0);
+                                                            Thread.Sleep(1000);
                                                             var p9devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p9devStatus);
                                                         return;
                                                         case "Red Blue Alternate Pulse":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Red Blue Alternate Pulse Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.RedBlueAlternatePulse, 0);
+                                                            Thread.Sleep(1000);
                                                             var p10devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p10devStatus);
                                                         return;
                                                         case "Green Blue Alternate Pulse":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Green Blue Alternate Pulse Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.GreenBlueAlternatePulse, 0);
+                                                            Thread.Sleep(1000);
                                                             var p11devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p11devStatus);
                                                         return;
                                                         case "Disco Flash":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Disco Flash Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.DiscoFlash, 0);
                                                             var p12devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p12devStatus);
                                                         return;
                                                         case "Red Flash":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Red Flash Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.RedFlash, 0);
+                                                            Thread.Sleep(1000);
                                                             var p13devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p13devStatus);
                                                         return;
                                                         case "Green Flash":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Green Flash Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.GreenFlash, 0);
+                                                            Thread.Sleep(1000);
                                                             var p14devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p14devStatus);
                                                         return;
                                                         case "Blue Flash":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Blue Flash Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.BlueFlash, 0);
+                                                            Thread.Sleep(1000);
                                                             var p15devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p15devStatus);
                                                         return;
                                                         case "Yellow Flash":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Yellow Flash Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.YellowFlash, 0);
+                                                            Thread.Sleep(1000);
                                                             var p16devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p16devStatus);
                                                         return;
                                                         case "Cyan Flash":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Cyan Flash Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.CyanFlash, 0);
+                                                            Thread.Sleep(1000);
                                                             var p17devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p17devStatus);
                                                         return;
                                                         case "Violet Flash":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Violet Flash Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.VioletFlash, 0);
+                                                            Thread.Sleep(1000);
                                                             var p18devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p18devStatus);
                                                         return;
                                                         case "White Flash":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s White Flash Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.WhiteFlash, 0);
+                                                            Thread.Sleep(1000);
                                                             var p19devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p19devStatus);
                                                         return;
                                                         case "Colour Change":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Colour Change Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.ColorChange, 0);
                                                             var p20devStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p20devStatus);
                                                         return;
                                                         case "Normal RGB":
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Normal RGB Mode Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.NormalRgb, 0);
+                                                            Thread.Sleep(1000);
                                                             var pdevStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, pdevStatus);
                                                         return;
                                                         default:
+                                                            Logger.LogDebug(
+                                                                "Setting Device " + devdetail.Mac + "'s Normal RGB Mode Preset");
                                                             devdetail.Dev.SetPreset(PresetMode.NormalRgb, 0);
+                                                            Thread.Sleep(1000);
                                                             var dpdevStatus = devdetail.Dev.GetStatus();
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, dpdevStatus);
                                                         return;
@@ -694,23 +787,30 @@ namespace HSPI_MagicHome
                                                 return;
                                             case "mode":
                                                 var mlastValue = deviceByRef.get_devValue(MHs);
-                                                var mvalDiff = PercentToByte((int)value - (int)mlastValue);
-                                                var mred = (devStatus.Red > 0) ? ByteValueCheck(devStatus.Red + mvalDiff): 1;
-                                                var mgreen = (devStatus.Green > 0) ? ByteValueCheck(devStatus.Green + mvalDiff) : 1;
-                                                var mblue = (devStatus.Blue > 0) ? ByteValueCheck(devStatus.Blue + mvalDiff) : 1;
-                                                var mwwhite = (devStatus.White1 > 0) ? ByteValueCheck((int)devStatus.White1 + mvalDiff) : 1;                                                
-                                                var mcwhite = (devStatus.White2 > 0) ? ByteValueCheck((int)devStatus.White2 + mvalDiff) : 1;
+                                                var mbyteValDiff = ((int)value == (int)mlastValue) ? 0 :  (int)value - (int)mlastValue;
+                                                var mvalDiff = PercentToByte(mbyteValDiff);
+                                                var mred = (devStatus.Red > 0) ? ((mvalDiff >= 0) ? (((devStatus.Red + mvalDiff) <= 255) ? (devStatus.Red + mvalDiff): 255) : (((devStatus.Red + mvalDiff) >= 0) ? (devStatus.Red + mvalDiff) : 1)) : 0;
+                                                var mgreen = (devStatus.Green > 0) ? (mvalDiff >= 0) ? (((devStatus.Green + mvalDiff) <= 255) ? (devStatus.Green + mvalDiff) : 255) : (((devStatus.Green + mvalDiff) >= 0) ? (devStatus.Green + mvalDiff) : 1) : 0;
+                                                var mblue = (devStatus.Blue > 0) ? (mvalDiff >= 0) ? (((devStatus.Blue + mvalDiff) <= 255) ? (devStatus.Blue + mvalDiff) : 255) : (((devStatus.Blue + mvalDiff) >= 0) ? (devStatus.Blue + mvalDiff) : 1) : 0;
+                                                var mwwhite = (devStatus.White1 > 0) ? (mvalDiff >= 0) ? ((((int)devStatus.White1 + mvalDiff) <= 255) ? ((int)devStatus.White1 + mvalDiff) : 255) : ((((int)devStatus.White1 + mvalDiff) >= 0) ? ((int)devStatus.White1 + mvalDiff) : 1) : 0;
+                                                var mcwhite = (devStatus.White2 > 0) ? (mvalDiff >= 0) ? ((((int)devStatus.White2 + mvalDiff) <= 255) ? ((int)devStatus.White2 + mvalDiff) : 255) : ((((int)devStatus.White2 + mvalDiff) >= 0) ? ((int)devStatus.White2 + mvalDiff) : 1) : 0;
+                                                Logger.LogDebug(
+                                                    "Setting Device " + devdetail.Mac + "'s brightness to " + value);
                                                 devdetail.Dev.SetColor((byte)mred, (byte)mgreen, (byte)mblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)mwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)mcwhite : (byte?)null, true, true);
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "colour":
                                                 var intvalue = (int) value;
-                                                string hexValue = intvalue.ToString("X");
+                                                string hexValue = intvalue.ToString("X6");
                                                 var colours = ConvertToRgb(hexValue);
                                                 var cwwhite = devStatus.White1;
                                                 var ccwhite = devStatus.White2;
+                                                Logger.LogDebug(
+                                                    "Setting Device " + devdetail.Mac + "'s Colour to " +hexValue);
                                                 devdetail.Dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true);
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -720,7 +820,10 @@ namespace HSPI_MagicHome
                                                 var rblue = devStatus.Blue;
                                                 var rwwhite = devStatus.White1;
                                                 var rcwhite = devStatus.White2;
+                                                Logger.LogDebug(
+                                                    "Setting Device " + devdetail.Mac + "'s Red Value to " + value);
                                                 devdetail.Dev.SetColor((byte)rred, (byte)rgreen, (byte)rblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true);
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -730,7 +833,10 @@ namespace HSPI_MagicHome
                                                 var gblue = devStatus.Blue;
                                                 var gwwhite = devStatus.White1;
                                                 var gcwhite = devStatus.White2;
+                                                Logger.LogDebug(
+                                                    "Setting Device " + devdetail.Mac + "'s Green Value to " + value);
                                                 devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true);
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -740,7 +846,10 @@ namespace HSPI_MagicHome
                                                 var bblue = (byte)value;
                                                 var bwwhite = devStatus.White1;
                                                 var bcwhite = devStatus.White2;
+                                                Logger.LogDebug(
+                                                    "Setting Device " + devdetail.Mac + "'s Blue Value to " + value);
                                                 devdetail.Dev.SetColor((byte)bred, (byte)bgreen, (byte)bblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true);
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -750,7 +859,10 @@ namespace HSPI_MagicHome
                                                 var w1blue = devStatus.Blue;
                                                 var w1wwhite = (byte)value;
                                                 var w1cwhite = devStatus.White2;
+                                                Logger.LogDebug(
+                                                    "Setting Device " + devdetail.Mac + "'s Warm White Value to " + value);
                                                 devdetail.Dev.SetColor((byte)w1red, (byte)w1green, (byte)w1blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true);
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -760,7 +872,10 @@ namespace HSPI_MagicHome
                                                 var w2blue = devStatus.Blue;
                                                 var w2wwhite = devStatus.White1;
                                                 var w2cwhite = (byte)value;
+                                                Logger.LogDebug(
+                                                    "Setting Device " + devdetail.Mac + "'s Cool White Value to " + value);
                                                 devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true);
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus();
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -841,14 +956,72 @@ namespace HSPI_MagicHome
         private async Task<bool> UpdateDiscoveredDevices()
         {
             var returnValue = false;
+            var deviceFindResultsList = new List<DeviceFindResult>();
             try
             {
-
-                var allDeviceDisc = DeviceFinder.FindDevices();
-                var devarray = allDeviceDisc.ToArray();
-                if (devarray.Length > deviceFindResults.Length)
+                
+                var nics = NetworkInterface.GetAllNetworkInterfaces();
+                foreach (var adapter in nics)
                 {
-                    deviceFindResults = allDeviceDisc as DeviceFindResult[] ?? allDeviceDisc.ToArray();
+                    int nicId = adapter.GetIPProperties().GetIPv4Properties().Index;
+                    if (NetworkInterface.LoopbackInterfaceIndex == nicId)
+                    {
+                        Logger.LogDebug("Discovery is not running on NIC Adapter " + adapter.Name + " as it is the Loopback Interface");
+                        continue;
+                    }
+
+                    if (adapter.NetworkInterfaceType != NetworkInterfaceType.Ethernet && adapter.NetworkInterfaceType != NetworkInterfaceType.Wireless80211)
+                    {
+                        Logger.LogDebug("Discovery is not running on NIC Adapter " + adapter.Name + " as it is not an Ethernet or Wifi Adapter");
+                        continue;
+                    }
+
+                    if (adapter.Supports(NetworkInterfaceComponent.IPv4) == false)
+                    {
+                        Logger.LogDebug("Discovery is not running on NIC Adapter " + adapter.Name + " as IPv4 is not Enabled on the Interface");
+                        continue;
+                    }
+                    if (adapter.OperationalStatus == OperationalStatus.Up && adapter.SupportsMulticast &&
+                        adapter.GetIPProperties().GetIPv4Properties() != null)
+                    {
+                        Logger.LogDebug("Discovery will run on on NIC Adapter " + adapter.Name);
+                        try
+                        {
+                            var adapterProperties = adapter.GetIPProperties();
+                            foreach (var ua in adapterProperties.UnicastAddresses)
+                            {
+                                if (ua.Address.AddressFamily == AddressFamily.InterNetwork)
+                                {
+                                    var ipNet = IPNetwork.Parse(ua.Address, ua.IPv4Mask);
+                                    Logger.LogDebug("Running Discovery on on NIC Adapter " + adapter.Name +
+                                                    " and will target broadcast address " + ipNet.Broadcast);
+                                    var nicEndPoint = new IPEndPoint(ipNet.Broadcast, 48899);
+                                    var allDeviceDisc = DeviceFinder.FindDevices(nicEndPoint);
+                                    deviceFindResultsList.AddRange(
+                                        allDeviceDisc as List<DeviceFindResult> ?? allDeviceDisc.ToList());
+                                }
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogError("Failed Discovery, the error is: " + ex.Message);
+                        }
+
+                    }
+                    else
+                    {
+                        Logger.LogDebug("Discovery will not run on on NIC Adapter " + adapter.Name + " as it is either in a non operational state, Does not support Multicast, or we have failed to get IPv4 Properties ");
+                    }
+                }
+                var devArray = deviceFindResultsList.DistinctBy(x => x.MacAddress).ToArray();
+                if (devArray.Length > deviceFindResults.Length)
+                {
+                    Logger.LogDebug("New Devices were discovered, Proceeding to Create Devices");
+                    deviceFindResults = deviceFindResultsList.DistinctBy(x => x.MacAddress).ToArray();
+                }
+                else
+                {
+                    Logger.LogDebug("No New Devices were discovered, not updating discovery list");
                 }
                 returnValue = true;
                 return await Task.FromResult(true);
@@ -866,101 +1039,228 @@ namespace HSPI_MagicHome
             var updatedMagicHomeIds = new List<string>();
             try
             {
-                if (deviceFindResults == null || deviceFindResults.Length == 0)
+                var deviceFindResultsList = new List<DeviceFindResult>();
+                if (deviceFindResults == null)
                 {
-                    var allDeviceDisc = DeviceFinder.FindDevices();
-                    var deviceFindResultsList = allDeviceDisc as List<DeviceFindResult> ?? allDeviceDisc.ToList();
-                    deviceFindResults = deviceFindResultsList.DistinctBy(x => x.MacAddress).ToArray();
-
-                    //deviceFindResults = allDeviceDisc as DeviceFindResult[] ?? allDeviceDisc.ToArray();
-                }
-
-                if (deviceFindResults.Length > 0)
-                {
-                    if (DevDetailsList == null)
+                    var nics = NetworkInterface.GetAllNetworkInterfaces();
+                    foreach (var adapter in nics)
                     {
-                        DevDetailsList = new List<DevDetail>();
-                    }
-                    foreach (var discovery in deviceFindResults)
-                    {
-                        try
+                        int nicId = adapter.GetIPProperties().GetIPv4Properties().Index;
+                        if (NetworkInterface.LoopbackInterfaceIndex == nicId)
                         {
-                            discResult = discovery;
-                            Device dev = null;
-                            if (DevDetailsList.Count > 0)
+                            Logger.LogDebug("Discovery is not running on NIC Adapter " + adapter.Name + " as it is the Loopback Interface" );
+                            continue;
+                        }
+
+                        if (adapter.NetworkInterfaceType != NetworkInterfaceType.Ethernet && adapter.NetworkInterfaceType != NetworkInterfaceType.Wireless80211)
+                        {
+                            Logger.LogDebug("Discovery is not running on NIC Adapter " + adapter.Name + " as it is not an Ethernet or Wifi Adapter");
+                            continue;
+                        }
+
+                        if (adapter.Supports(NetworkInterfaceComponent.IPv4) == false)
+                        {
+                            Logger.LogDebug("Discovery is not running on NIC Adapter " + adapter.Name + " as IPv4 is not Enabled on the Interface");
+                            continue;
+                        }
+                        if (adapter.OperationalStatus == OperationalStatus.Up && adapter.SupportsMulticast &&
+                            adapter.GetIPProperties().GetIPv4Properties() != null)
+                        {
+                            Logger.LogDebug("Discovery will run on on NIC Adapter " + adapter.Name);
+                            try
                             {
+                                var adapterProperties = adapter.GetIPProperties();
+                                foreach (var ua in adapterProperties.UnicastAddresses)
+                                {
+                                    if (ua.Address.AddressFamily == AddressFamily.InterNetwork)
+                                    {
+                                        var ipNet = IPNetwork.Parse(ua.Address, ua.IPv4Mask);
+                                        Logger.LogDebug("Running Discovery on on NIC Adapter " + adapter.Name +
+                                                        " and will target broadcast address " + ipNet.Broadcast);
+                                        var nicEndPoint = new IPEndPoint(ipNet.Broadcast, 48899);
+                                        var allDeviceDisc = DeviceFinder.FindDevices(nicEndPoint);
+                                        deviceFindResultsList.AddRange(
+                                            allDeviceDisc as List<DeviceFindResult> ?? allDeviceDisc.ToList());
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Logger.LogError("Failed Discovery, the error is: " + ex.Message);
+                            }
+
+                        }
+                        else
+                        {
+                            Logger.LogDebug("Discovery will not run on on NIC Adapter " + adapter.Name + " as it is either in a non operational state, Does not support Multicast, or we have failed to get IPv4 Properties ");
+                        }
+                    }
+                   deviceFindResults = deviceFindResultsList.DistinctBy(x => x.MacAddress).ToArray();
+                }
+                else
+                {
+                    if (deviceFindResults.Length == 0)
+                    {
+                        var nics = NetworkInterface.GetAllNetworkInterfaces();
+                        foreach (var adapter in nics)
+                        {
+                            int nicId = adapter.GetIPProperties().GetIPv4Properties().Index;
+                            if (NetworkInterface.LoopbackInterfaceIndex == nicId)
+                            {
+                                Logger.LogDebug("Discovery is not running on NIC Adapter " + adapter.Name + " as it is the Loopback Interface");
+                                continue;
+                            }
+
+                            if (adapter.NetworkInterfaceType != NetworkInterfaceType.Ethernet && adapter.NetworkInterfaceType != NetworkInterfaceType.Wireless80211)
+                            {
+                                Logger.LogDebug("Discovery is not running on NIC Adapter " + adapter.Name + " as it is not an Ethernet or Wifi Adapter");
+                                continue;
+                            }
+
+                            if (adapter.Supports(NetworkInterfaceComponent.IPv4) == false)
+                            {
+                                Logger.LogDebug("Discovery is not running on NIC Adapter " + adapter.Name + " as IPv4 is not Enabled on the Interface");
+                                continue;
+                            }
+                            if (adapter.OperationalStatus == OperationalStatus.Up && adapter.SupportsMulticast &&
+                                adapter.GetIPProperties().GetIPv4Properties() != null)
+                            {
+                                Logger.LogDebug("Discovery will run on on NIC Adapter " + adapter.Name);
                                 try
                                 {
-                                    dev =
-                                        (Equals(
-                                             DevDetailsList.Find(x => x.Mac == discovery.MacAddress.ToString())
-                                                 .Discovery.MacAddress, discovery.MacAddress) &&
-                                         Equals(
-                                             DevDetailsList.Find(x => x.Mac == discovery.MacAddress.ToString())
-                                                 .Discovery.IpAddress, discovery.IpAddress))
-                                            ? DevDetailsList.Find(x => x.Mac == discovery.MacAddress.ToString()).Dev
-                                            : GetDevice(discovery);
+                                    var adapterProperties = adapter.GetIPProperties();
+                                    foreach (var ua in adapterProperties.UnicastAddresses)
+                                    {
+                                        if (ua.Address.AddressFamily == AddressFamily.InterNetwork)
+                                        {
+                                            var ipNet = IPNetwork.Parse(ua.Address, ua.IPv4Mask);
+                                            Logger.LogDebug("Running Discovery on on NIC Adapter " + adapter.Name +
+                                                            " and will target broadcast address " + ipNet.Broadcast);
+                                            var nicEndPoint = new IPEndPoint(ipNet.Broadcast, 48899);
+                                            var allDeviceDisc = DeviceFinder.FindDevices(nicEndPoint);
+                                            deviceFindResultsList.AddRange(
+                                                allDeviceDisc as List<DeviceFindResult> ?? allDeviceDisc.ToList());
+                                        }
+                                    }
                                 }
-                                catch
+                                catch (Exception ex)
                                 {
-                                    //ignored
+                                    Logger.LogError("Failed Discovery, the error is: " + ex.Message);
                                 }
-                                
-                            }
-                            if (dev != null)
-                            {
-                                var devStatus = dev.GetStatus();
-                                var devDetail = new DevDetail()
-                                {
-                                    Mac = discovery.MacAddress.ToString(),
-                                    Discovery = discovery,
-                                    Dev = dev,
-                                    DevStatus = devStatus
-                                };
-                                var itemToRemove = DevDetailsList.SingleOrDefault(x => x.Mac == discovery.MacAddress.ToString());
-                                if (itemToRemove != null)
-                                {
-                                    DevDetailsList.Remove(itemToRemove);
-                                };
-                                DevDetailsList.Add(devDetail);
-                                Logger.LogDebug("Device model " + discovery.Model + " with Mac Address " +
-                                                discovery.MacAddress + " and Firmware Version " +
-                                                devStatus.VersionNumber + ", proceeding to update Homeseer devices.");
-                                UpdateMagicHomeDevice(discovery, dev, devStatus);
+
                             }
                             else
                             {
-                                if (DevDetailsList.Count < deviceFindResults.Length)
+                                Logger.LogDebug("Discovery will not run on on NIC Adapter " + adapter.Name + " as it is either in a non operational state, Does not support Multicast, or we have failed to get IPv4 Properties ");
+                            }
+
+                        }
+                        deviceFindResults = deviceFindResultsList.DistinctBy(x => x.MacAddress).ToArray();
+                    }
+
+                    
+                }
+
+                if (deviceFindResults != null)
+                {
+                    if (deviceFindResults.Length > 0)
+                    {
+                        if (DevDetailsList == null)
+                        {
+                            DevDetailsList = new List<DevDetail>();
+                        }
+                        foreach (var discovery in deviceFindResults)
+                        {
+                            try
+                            {
+                                discResult = discovery;
+                                Device dev = null;
+                                if (DevDetailsList.Count > 0)
                                 {
-                                    var initDev = GetDevice(discovery);
-                                    var initDevStatus = initDev.GetStatus();
-                                    var initDevDetail = new DevDetail()
+                                    try
+                                    {
+                                        dev =
+                                            (Equals(
+                                                 DevDetailsList.Find(x => x.Mac == discovery.MacAddress.ToString())
+                                                     .Discovery.MacAddress, discovery.MacAddress) &&
+                                             Equals(
+                                                 DevDetailsList.Find(x => x.Mac == discovery.MacAddress.ToString())
+                                                     .Discovery.IpAddress, discovery.IpAddress))
+                                                ? DevDetailsList.Find(x => x.Mac == discovery.MacAddress.ToString()).Dev
+                                                : GetDevice(discovery);
+                                    }
+                                    catch
+                                    {
+                                        //ignored
+                                    }
+
+                                }
+                                if (dev != null)
+                                {
+                                    var devStatus = dev.GetStatus();
+                                    var devDetail = new DevDetail()
                                     {
                                         Mac = discovery.MacAddress.ToString(),
                                         Discovery = discovery,
-                                        Dev = initDev,
-                                        DevStatus = initDevStatus
+                                        Dev = dev,
+                                        DevStatus = devStatus
                                     };
-                                    DevDetailsList.Add(initDevDetail);
+                                    var itemToRemove = DevDetailsList.SingleOrDefault(x => x.Mac == discovery.MacAddress.ToString());
+                                    if (itemToRemove != null)
+                                    {
+                                        DevDetailsList.Remove(itemToRemove);
+                                    };
+                                    DevDetailsList.Add(devDetail);
                                     Logger.LogDebug("Device model " + discovery.Model + " with Mac Address " +
                                                     discovery.MacAddress + " and Firmware Version " +
-                                                    initDevStatus.VersionNumber + ", proceeding to update Homeseer devices.");
-                                    UpdateMagicHomeDevice(discovery, initDev, initDevStatus);
+                                                    devStatus.VersionNumber + ", proceeding to update Homeseer devices.");
+                                    UpdateMagicHomeDevice(discovery, dev, devStatus);
+                                }
+                                else
+                                {
+                                    if (DevDetailsList.Count < deviceFindResults.Length)
+                                    {
+                                        var initDev = GetDevice(discovery);
+                                        var initDevStatus = initDev.GetStatus();
+                                        var initDevDetail = new DevDetail()
+                                        {
+                                            Mac = discovery.MacAddress.ToString(),
+                                            Discovery = discovery,
+                                            Dev = initDev,
+                                            DevStatus = initDevStatus
+                                        };
+                                        DevDetailsList.Add(initDevDetail);
+                                        Logger.LogDebug("Device model " + discovery.Model + " with Mac Address " +
+                                                        discovery.MacAddress + " and Firmware Version " +
+                                                        initDevStatus.VersionNumber + ", proceeding to update Homeseer devices.");
+                                        UpdateMagicHomeDevice(discovery, initDev, initDevStatus);
+                                    }
                                 }
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            if (discResult != null)
+                            catch (Exception ex)
                             {
-                                Logger.LogError("Unable to update the status of device with IP " + discResult.IpAddress +
-                                                " and Mac Address " + discResult.MacAddress + ", the error reported was: " +
-                                                ex.Message);
+                                if (discResult != null)
+                                {
+                                    Logger.LogError("Unable to update the status of device with IP " + discResult.IpAddress +
+                                                    " and Mac Address " + discResult.MacAddress + ", the error reported was: " +
+                                                    ex.Message);
+                                }
                             }
-                        }
 
+                        }
+                    }
+                    else
+                    {
+                        Logger.LogDebug(
+                            "Unable to discover any Magic Home devices. please restart the plugin to try again");
                     }
                 }
+                else
+                {
+                    Logger.LogDebug("No response from any devices were found during discovery");
+                }
+                
+
 
                 foreach (var magicHome in _mMagicHome)
                 {
@@ -980,8 +1280,17 @@ namespace HSPI_MagicHome
             catch (Exception ex)
             {
                 if (discResult != null)
+                {
                     Logger.LogError("Unable to update the status of all devices the error reported was: " +
                                     ex.Message);
+                }
+                else
+                {
+                    Logger.LogError("Unable to discover any devices, the error was: " +
+                                    ex.Message);
+                }
+
+                    
                 returnValue = false;
             }
 
@@ -1262,15 +1571,15 @@ namespace HSPI_MagicHome
 
         private static int PercentToByte(int pctValue)
         {
-            if (pctValue > 100)
-            {
-                pctValue = 100;
-            }
+            //if (pctValue > 100)
+            //{
+                //pctValue = 100;
+            //}
 
-            if (pctValue < 0)
-            {
-                pctValue = 0;
-            }
+            //if (pctValue < 0)
+            //{
+                //pctValue = 0;
+            //}
             return (int)((pctValue * 255) / 100);
         }
 
@@ -1311,25 +1620,26 @@ namespace HSPI_MagicHome
         private string PostBackProcPriv(string page, string data, string user, int userRights)
         {
             var parts = HttpUtility.ParseQueryString(data);
-
-            if (deviceFindResults.Length > 0)
+            if (deviceFindResults != null)
             {
-                foreach (var discovery in deviceFindResults)
+                if (deviceFindResults.Length > 0)
                 {
-                    if (parts["id"] == discovery.MacAddress.ToString())
+                    foreach (var discovery in deviceFindResults)
                     {
-                        var devPref = new DevIniSetting
+                        if (parts["id"] == discovery.MacAddress.ToString())
                         {
-                            Mac = discovery.MacAddress.ToString(),
-                            deviceType = (DeviceType) Enum.Parse(typeof(DeviceType),
-                                parts[discovery.MacAddress.ToString()])
-                        };
-                        SaveDevPrefToIni(devPref);
+                            var devPref = new DevIniSetting
+                            {
+                                Mac = discovery.MacAddress.ToString(),
+                                deviceType = (DeviceType)Enum.Parse(typeof(DeviceType),
+                                    parts[discovery.MacAddress.ToString()])
+                            };
+                            SaveDevPrefToIni(devPref);
+                        }
                     }
                 }
             }
             
-
             if (parts["id"] == "loglevel")
             {
                 LogLevel = parts["loglevel"];
