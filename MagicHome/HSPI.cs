@@ -62,8 +62,9 @@ namespace HSPI_MagicHome
             return false;
         }
 
-        public override void HSEvent(Enums.HSEvent eventType, object[] parameters)
+        public override void HSEvent(Enums.HSEvent eventType, object[] parms)
         {
+            _mObjApp.HsEvent(eventType, parms);
         }
 
         public override string InitIO(string port)
@@ -111,16 +112,16 @@ namespace HSPI_MagicHome
         public override void ShutdownIO()
         {
             // debug
-            HS.WriteLog(Name, "Entering ShutdownIO");
+            //HS.WriteLog(Name, "Entering ShutdownIO");
 
             // shut everything down here
-
+            _mObjApp.Shutdown();
 
             // let our console wrapper know we are finished
             Shutdown = true;
 
             // debug
-            HS.WriteLog(Name, "Completed ShutdownIO");
+            //HS.WriteLog(Name, "Completed ShutdownIO");
         }
 
         public override SearchReturn[] Search(string searchString, bool regEx)
@@ -185,9 +186,9 @@ namespace HSPI_MagicHome
         }
 
         public override IPlugInAPI.strMultiReturn TriggerProcessPostUI(NameValueCollection postData,
-            IPlugInAPI.strTrigActInfo actionInfo)
+            IPlugInAPI.strTrigActInfo trigInfoIn)
         {
-            return new IPlugInAPI.strMultiReturn();
+            return _mObjApp.Triggers.TriggerProcessPostUI(postData, trigInfoIn);
         }
 
         public override bool TriggerReferencesDevice(IPlugInAPI.strTrigActInfo actionInfo, int deviceId)

@@ -16,17 +16,20 @@ namespace MagicHomeAPI
         private class DeviceFindEnumerable : IEnumerable<DeviceFindResult>
         {
             private readonly EndPoint _endPoint;
+            private readonly EndPoint _localEndPoint;
             private readonly int _timeoutMs;
 
-            public DeviceFindEnumerable(EndPoint endPoint, int timeoutMs)
+            public DeviceFindEnumerable(EndPoint endPoint, EndPoint localEndPoint, int timeoutMs)
             {
                 _endPoint = endPoint;
+                _localEndPoint = localEndPoint;
                 _timeoutMs = timeoutMs;
             }
 
             private class DeviceFindEnumerator : IEnumerator<DeviceFindResult>
             {
                 private readonly EndPoint _endPoint;
+                private readonly EndPoint _localEndPoint;
                 private readonly Socket _socket;
                 private readonly DateTime _endTime;
                 private static readonly byte[] Message = Encoding.ASCII.GetBytes("HF-A11ASSISTHREAD");
@@ -35,14 +38,18 @@ namespace MagicHomeAPI
                 private const int ReceiveTriesTotal = 5;
                 private const int SendTriesTotal = 5;
 
-                public DeviceFindEnumerator(EndPoint endPoint, int timeoutMs)
+                public DeviceFindEnumerator(EndPoint endPoint, EndPoint localEndPoint, int timeoutMs)
                 {
                     _endPoint = endPoint;
-                   
+                    _localEndPoint = localEndPoint;
                     _socket = new Socket(endPoint.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
                     _socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
                     _socket.ReceiveTimeout = timeoutMs / ReceiveTriesTotal / SendTriesTotal;
-
+                    if (localEndPoint != null)
+                    {
+                        _socket.Bind(localEndPoint);
+                    }
+                    
                     _foundDevices = new HashSet<DeviceFindResult>(DeviceFindResult.MacAddressEqualityComparer);
 
                     _endTime = DateTime.UtcNow.AddMilliseconds(timeoutMs);
@@ -150,7 +157,7 @@ namespace MagicHomeAPI
 
             public IEnumerator<DeviceFindResult> GetEnumerator()
             {
-                return new DeviceFindEnumerator(_endPoint, _timeoutMs);
+                return new DeviceFindEnumerator(_endPoint, _localEndPoint, _timeoutMs);
             }
 
             IEnumerator IEnumerable.GetEnumerator()
@@ -159,12 +166,12 @@ namespace MagicHomeAPI
             }
         }
 
-        public static IEnumerable<DeviceFindResult> FindDevices(EndPoint endPoint = null, int timeout = 5000)
+        public static IEnumerable<DeviceFindResult> FindDevices(EndPoint endPoint = null, EndPoint localEndPoint = null, int timeout = 5000)
         {
             if (endPoint == null)
                 endPoint = new IPEndPoint(IPAddress.Broadcast, BroadcastPort);
 
-            return new DeviceFindEnumerable(endPoint, timeout);
+            return new DeviceFindEnumerable(endPoint, localEndPoint, timeout);
         }
     }
 }

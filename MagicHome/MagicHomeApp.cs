@@ -996,7 +996,8 @@ namespace HSPI_MagicHome
                                     Logger.LogDebug("Running Discovery on on NIC Adapter " + adapter.Name +
                                                     " and will target broadcast address " + ipNet.Broadcast);
                                     var nicEndPoint = new IPEndPoint(ipNet.Broadcast, 48899);
-                                    var allDeviceDisc = DeviceFinder.FindDevices(nicEndPoint);
+                                    var nicLocalEnpoint = new IPEndPoint(ua.Address, 48899);
+                                    var allDeviceDisc = DeviceFinder.FindDevices(nicEndPoint, nicLocalEnpoint);
                                     deviceFindResultsList.AddRange(
                                         allDeviceDisc as List<DeviceFindResult> ?? allDeviceDisc.ToList());
                                 }
@@ -1045,6 +1046,11 @@ namespace HSPI_MagicHome
                     var nics = NetworkInterface.GetAllNetworkInterfaces();
                     foreach (var adapter in nics)
                     {
+                        if (adapter.NetworkInterfaceType == NetworkInterfaceType.Tunnel)
+                        {
+                            Logger.LogDebug("Discovery is not running on NIC Adapter " + adapter.Name + " as it is the Tunnel Interface");
+                            continue;
+                        }
                         int nicId = adapter.GetIPProperties().GetIPv4Properties().Index;
                         if (NetworkInterface.LoopbackInterfaceIndex == nicId)
                         {
@@ -1078,7 +1084,8 @@ namespace HSPI_MagicHome
                                         Logger.LogDebug("Running Discovery on on NIC Adapter " + adapter.Name +
                                                         " and will target broadcast address " + ipNet.Broadcast);
                                         var nicEndPoint = new IPEndPoint(ipNet.Broadcast, 48899);
-                                        var allDeviceDisc = DeviceFinder.FindDevices(nicEndPoint);
+                                        var nicLocalEnpoint = new IPEndPoint(ua.Address, 48899);
+                                        var allDeviceDisc = DeviceFinder.FindDevices(nicEndPoint, nicLocalEnpoint);
                                         deviceFindResultsList.AddRange(
                                             allDeviceDisc as List<DeviceFindResult> ?? allDeviceDisc.ToList());
                                     }
@@ -1104,6 +1111,11 @@ namespace HSPI_MagicHome
                         var nics = NetworkInterface.GetAllNetworkInterfaces();
                         foreach (var adapter in nics)
                         {
+                            if (adapter.NetworkInterfaceType == NetworkInterfaceType.Tunnel)
+                            {
+                                Logger.LogDebug("Discovery is not running on NIC Adapter " + adapter.Name + " as it is the Tunnel Interface");
+                                continue;
+                            }
                             int nicId = adapter.GetIPProperties().GetIPv4Properties().Index;
                             if (NetworkInterface.LoopbackInterfaceIndex == nicId)
                             {
@@ -1137,7 +1149,8 @@ namespace HSPI_MagicHome
                                             Logger.LogDebug("Running Discovery on on NIC Adapter " + adapter.Name +
                                                             " and will target broadcast address " + ipNet.Broadcast);
                                             var nicEndPoint = new IPEndPoint(ipNet.Broadcast, 48899);
-                                            var allDeviceDisc = DeviceFinder.FindDevices(nicEndPoint);
+                                            var nicLocalEnpoint = new IPEndPoint(ua.Address, 48899);
+                                            var allDeviceDisc = DeviceFinder.FindDevices(nicEndPoint, nicLocalEnpoint);
                                             deviceFindResultsList.AddRange(
                                                 allDeviceDisc as List<DeviceFindResult> ?? allDeviceDisc.ToList());
                                         }

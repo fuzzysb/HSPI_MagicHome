@@ -24,7 +24,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>0</WarningLevel>
     <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -173,7 +173,7 @@
   </Target>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties Reactor_Deploy="0" Reactor_Output="E:\Git\HSPI_MagicHome\MagicHome\bin\Release\HSPI_MagicHome_Secure\HSPI_MagicHome.exe" Reactor_Configuration="Release" Reactor_Project="E:\Git\HSPI_MagicHome\MagicHome\MagicHome.nrproj" Reactor_Commands="" Reactor_Enabled="0" />
+      <UserProperties Reactor_Enabled="0" Reactor_Commands="" Reactor_Project="E:\Git\HSPI_MagicHome\MagicHome\MagicHome.nrproj" Reactor_Configuration="Release" Reactor_Output="E:\Git\HSPI_MagicHome\MagicHome\bin\Release\HSPI_MagicHome_Secure\HSPI_MagicHome.exe" Reactor_Deploy="0" />
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
