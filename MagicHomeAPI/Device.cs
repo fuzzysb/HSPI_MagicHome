@@ -310,18 +310,26 @@ namespace MagicHomeAPI
 
                     }
 
+                    var time = DateTime.Now;
+
                     if (_deviceType == DeviceType.LegacyBulb)
                     {
                         while (_socket.Available < 12)
                         {
-
+                            if (DateTime.Now > time.AddMilliseconds(_socket.ReceiveTimeout))
+                            {
+                                throw new SocketException((int)SocketError.TimedOut);
+                            }
                         }
                     }
                     else
                     {
                         while (_socket.Available < 14)
                         {
-
+                            if (DateTime.Now > time.AddMilliseconds(_socket.ReceiveTimeout))
+                            {
+                                throw new SocketException((int)SocketError.TimedOut);
+                            }
                         }
                     }
                     int readBytes = _socket.Receive(buffer);
