@@ -836,11 +836,31 @@ namespace HSPI_MagicHome
             deviceTypeInfo.Device_Type = (int)DeviceTypeInfo_m.DeviceTypeInfo.eDeviceAPI.Plug_In;
             deviceTypeInfo.Device_SubType = (int)DeviceTypeInfo_m.DeviceTypeInfo.eDeviceAPI.No_API;
             device.set_DeviceType_Set(this.MHs, deviceTypeInfo);
-            device.MISC_Set(MHs, Enums.dvMISC.CONTROL_POPUP);
             var num = device.get_Ref(this.MHs);
+            device.MISC_Set(MHs, Enums.dvMISC.CONTROL_POPUP);
             this.MHs.DeviceVSP_ClearAll(num, true);
             this.MHs.DeviceVGP_ClearAll(num, true);
             device.set_Address(MHs, discovery.MacAddress + "-preset");
+            this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Both)
+            {
+                PairType = VSVGPairs.VSVGPairType.Range,
+                RangeStart = 1,
+                RangeEnd = 100,
+                IncludeValues = true,
+                RangeStatusDecimals = 0,
+                RangeStatusPrefix = "",
+                RangeStatusSuffix = "",
+                HasScale = false,
+                Render = Enums.CAPIControlType.ValuesRangeSlider,
+                ControlUse = ePairControlUse.Not_Specified,
+                ValueOffset = 0,
+                Render_Location = new Enums.CAPIControlLocation()
+                {
+                    Row = 2,
+                    Column = 1,
+                    ColumnSpan = 3
+                }
+            });
             this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Both)
             {
                 PairType = VSVGPairs.VSVGPairType.SingleValue,
@@ -992,7 +1012,7 @@ namespace HSPI_MagicHome
             {
                 PairType = VSVGPairs.VSVGPairType.Range,
                 Graphic = "images/HomeSeer/status/alarmheartbeat.png",
-                RangeStart = 37,
+                RangeStart = 1,
                 RangeEnd = 97
             });
             this.SetDeviceVersion(device, Assembly.GetEntryAssembly().GetName().Version);

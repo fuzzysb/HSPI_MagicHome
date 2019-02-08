@@ -23,7 +23,7 @@ namespace HSPI_MagicHome
         {
             if (trigInfo.DataIn == null)
                 return "Error, trigInfo.DataIn is null";
-            MagicHomeApp.GetInstance();
+            //MagicHomeApp.GetInstance();
             // ISSUE: explicit non-virtual call
             var str1 = trigInfo.UID.ToString();
             var str2 = "";

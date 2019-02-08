@@ -14,6 +14,7 @@ namespace MagicHomeAPI
         public readonly DeviceType _deviceType;
         private Socket _socket;
         private const int DefaultPort = 5577;
+        private const byte maxDelay = 0x1f;
 
         public Device(IPAddress ip, DeviceType deviceType)
             : this(new IPEndPoint(ip, DefaultPort), deviceType)
@@ -26,13 +27,13 @@ namespace MagicHomeAPI
             _deviceType = deviceType;
         }
 
-        public DeviceStatus GetStatus()
+        public DeviceStatus GetStatus(int timeOut)
         {
             if (_deviceType == DeviceType.LegacyBulb)
             {
                 var message = new byte[] { 0xEF, 0x01, 0x77 };
 
-                var response = SendMessage(message, false, true);
+                var response = SendMessage(message, false, timeOut, true);
 
                 if (response.Length != 12)
                     throw new Exception("Controller sent wrong number of bytes while getting status");
@@ -55,7 +56,7 @@ namespace MagicHomeAPI
             {
                 var message = new byte[] { 0x81, 0x8A, 0x8B, 0x96 };
 
-                var response = SendMessage(message, false, true);
+                var response = SendMessage(message, false, timeOut, true);
 
                 if (response.Length != 14)
                     throw new Exception("Controller sent wrong number of bytes while getting status");
@@ -76,32 +77,32 @@ namespace MagicHomeAPI
             }
         }
 
-        public void SetPowerState(PowerState state)
+        public void SetPowerState(PowerState state, int timeOut)
         {
             if (_deviceType == DeviceType.LegacyBulb)
             {
-                SendMessage(new byte[] { 0xCC, (byte)state, 0x33 }, false, false);
+                SendMessage(new byte[] { 0xCC, (byte)state, 0x33 }, false, timeOut, false);
 
                 
             }
             else
             {   
-                SendMessage(new byte[] { 0x71, (byte)state, 0x0F }, true, false);
+                SendMessage(new byte[] { 0x71, (byte)state, 0x0F }, true, timeOut, false);
             }
                 
         }
 
-        public void TurnOn()
+        public void TurnOn(int timeOut)
         {
-            SetPowerState(PowerState.PowerOn);
+            SetPowerState(PowerState.PowerOn, timeOut);
         }
 
-        public void TurnOff()
+        public void TurnOff(int timeOut)
         {
-            SetPowerState(PowerState.PowerOff);
+            SetPowerState(PowerState.PowerOff, timeOut);
         }
 
-        public void SetColor(byte? red = null, byte? green = null, byte? blue = null, byte? white1 = null, byte? white2 = null, bool waitForResponse = true, bool persist = true)
+        public void SetColor(byte? red = null, byte? green = null, byte? blue = null, byte? white1 = null, byte? white2 = null, bool waitForResponse = true, bool persist = true, int timeOut = 100)
         {
             byte[] message;
 
@@ -144,32 +145,29 @@ namespace MagicHomeAPI
             }
 
 
-            SendMessage(message, sendChecksum, false);
+            SendMessage(message, sendChecksum, timeOut, false);
 
         }
 
-        public void SetPreset(PresetMode presetMode, byte delay)
+        public void SetPreset(PresetMode presetMode, int speed, int timeOut)
         {
-            if (delay > 24)
-                delay = 24;
-            if (delay < 1)
-                delay = 1;
+            var delay = SpeedToDelay(speed);
 
             if (_deviceType == DeviceType.LegacyBulb)
             {
-                SendMessage(new byte[] { 0xBB, (byte)presetMode, delay, 0x44 }, false, false);
+                SendMessage(new byte[] { 0xBB, (byte)presetMode, delay, 0x44 }, false, timeOut, false);
             }
             else
             {
-                SendMessage(new byte[] { 0x61, (byte)presetMode, delay, 0x0F }, true, false);
+                SendMessage(new byte[] { 0x61, (byte)presetMode, delay, 0x0F }, true, timeOut, false);
             }
         }
 
-        public DateTime GetTime()
+        public DateTime GetTime(int timeOut)
         {
             var msg = new byte[] { 0x11, 0x1a, 0x1b, 0x0f };
 
-            var response = SendMessage(msg, true, true);
+            var response = SendMessage(msg, true, timeOut, true);
 
             if (response.Length != 12)
                 throw new Exception("Controller sent wrong number of bytes while getting time");
@@ -177,7 +175,7 @@ namespace MagicHomeAPI
             return new DateTime(response[3] + 2000, response[4], response[5], response[6], response[7], response[8]);
         }
 
-        public void SetTime(DateTime time)
+        public void SetTime(DateTime time, int timeOut)
         {
             byte[] msg;
 
@@ -199,14 +197,14 @@ namespace MagicHomeAPI
                 };
             }
 
-            SendMessage(msg, true, false);
+            SendMessage(msg, true, timeOut, false);
         }
 
-        public IEnumerable<Timer> GetTimers()
+        public IEnumerable<Timer> GetTimers(int timeOut)
         {
             var msg = new byte[] { 0x22, 0x2a, 0x2b, 0x0f };
 
-            var response = SendMessage(msg, true, true);
+            var response = SendMessage(msg, true, timeOut, true);
             if (response.Length != 88)
                 throw new Exception("Controller sent wrong number of bytes while getting timers");
 
@@ -222,7 +220,7 @@ namespace MagicHomeAPI
             }
         }
 
-        public void SetTimers(IEnumerable<Timer> timers)
+        public void SetTimers(IEnumerable<Timer> timers, int timeOut)
         {
             var timersToSend = new Timer[6];
 
@@ -253,13 +251,54 @@ namespace MagicHomeAPI
             msg[85] = 0x00;
             msg[86] = 0xF0;
 
-            SendMessage(msg, true, false);
+            SendMessage(msg, true, timeOut, false);
         }
 
-        private byte[] SendMessage(byte[] bytes, bool sendChecksum, bool waitForResponse)
+        private byte SpeedToDelay(int speed)
+        {
+            // speed is 0-100, delay is 1-31
+            if (speed > 100)
+            {
+                speed = 100;
+            }
+
+            if (speed < 0)
+            {
+                speed = 0;
+            }
+
+            var invSpeed = 100 - speed;
+
+            var delay = (int) ((invSpeed * (maxDelay - 1)) / 100);
+            // translate from 0-30 to 1-31
+            delay = delay + 1;
+            return (byte)delay;
+        }
+        
+        private int DelayToSpeed(int delay)
+        {
+            // speed is 0-100, delay is 1-31
+            // 1st translate delay to 0-30
+            delay = (delay - 1);
+            if(delay > maxDelay - 1)
+            {
+                delay = maxDelay - 1;
+            }
+
+            if (delay < 0)
+            {
+                delay = 0;
+            }
+
+            var invSpeed = delay * 100 / (maxDelay - 1);
+            var speed = 100 - invSpeed;
+            return speed;
+        }
+        
+        private byte[] SendMessage(byte[] bytes, bool sendChecksum, int timeOut, bool waitForResponse)
         {
             if (_socket == null || !_socket.Connected)
-                Reconnect();
+                Reconnect(timeOut);
 
             if (sendChecksum)
             {
@@ -380,14 +419,14 @@ namespace MagicHomeAPI
             return string.Format("{0} Device on {1}", _deviceType, _endPoint);
         }
 
-        public void Reconnect()
+        public void Reconnect(int timeOut)
         {
             if (_socket != null)
                 _socket.Dispose();
 
             _socket = new Socket(_endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            _socket.ReceiveTimeout = 100;
-            _socket.SendTimeout = 100;
+            _socket.ReceiveTimeout = timeOut;
+            _socket.SendTimeout = timeOut;
             _socket.Connect(_endPoint);
         }
 

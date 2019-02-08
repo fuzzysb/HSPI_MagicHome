@@ -100,9 +100,23 @@ namespace HSPI_MagicHome
                     }
                 }
             }
-            
-            
-            
+
+            stringBuilder.AppendLine("<tr><td class='tableheader' colspan='7'>Network Settings</td>");
+            stringBuilder.AppendLine("<tr>");
+            stringBuilder.AppendLine("<td class='tablecell' align='left' style='width:200px'>");
+            stringBuilder.AppendLine("Send/Receive Timeout");
+            stringBuilder.AppendLine("</td>");
+            stringBuilder.AppendLine("<td class='tablecell' align='left'>");
+            var jqDropListt = new clsJQuery.jqDropList("timeout", PageName, false);
+            var tvalues = new int[] {100, 200, 500, 1000, 2000, 5000};
+            foreach (var tOut in tvalues)
+            {
+                jqDropListt.AddItem(tOut.ToString(), tOut.ToString(),
+                    tOut == m_objApp.SendRecieveTimeout);
+            }
+            stringBuilder.AppendLine(jqDropListt.Build());
+            stringBuilder.AppendLine("</td>");
+            stringBuilder.AppendLine("</tr>");
             stringBuilder.AppendLine("<tr><td class='tableheader' colspan='7'>Log settings</td>");
             stringBuilder.AppendLine("<tr>");
             stringBuilder.AppendLine("<td class='tablecell' align='left' style='width:200px'>");

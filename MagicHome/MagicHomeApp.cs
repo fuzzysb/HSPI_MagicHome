@@ -32,6 +32,7 @@ namespace HSPI_MagicHome
         private static MagicHomeApp _sObjSingletonInstance = (MagicHomeApp)null;
         private static readonly object SObjLock = new object();
         private string _mInstance = "";
+        private int _mTimeOut { get; set; }
         private string _mIniFile = "MagicHome.ini";
         private string PluginVersion { get; set; }
         private readonly object _mUpdateLock = new object();
@@ -183,6 +184,7 @@ namespace HSPI_MagicHome
                 Actions = new Actions();
                 var str2 = "MagicHome".ToLower() + "config";
                 _mConfigPage = new WebConfig(str2 + (_mInstance != "" ? ":" + _mInstance : ""));
+                _mTimeOut = Convert.ToInt32(MHs.GetINISetting("GENERAL", "send_receive_timeout", "100", IniFile));
                 MHs.RegisterPage(str2, "MagicHome", _mInstance);
                 var webPageDesc1 = new WebPageDesc
                 {
@@ -403,7 +405,7 @@ namespace HSPI_MagicHome
                                                 {
                                                     Logger.LogDebug(
                                                         "Setting Device " + devdetail.Mac + "'s power state to On");
-                                                    devdetail.Dev.SetPowerState(PowerState.PowerOn);
+                                                    devdetail.Dev.SetPowerState(PowerState.PowerOn, SendRecieveTimeout);
 
                                                 }
 
@@ -411,10 +413,10 @@ namespace HSPI_MagicHome
                                                 {
                                                     Logger.LogDebug(
                                                         "Setting Device " + devdetail.Mac + "'s power state to Off");
-                                                    devdetail.Dev.SetPowerState(PowerState.PowerOff);
+                                                    devdetail.Dev.SetPowerState(PowerState.PowerOff,SendRecieveTimeout);
                                                 }
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "colour":
@@ -438,9 +440,9 @@ namespace HSPI_MagicHome
                                                         "decreasing Device " + devdetail.Mac + "'s Red Value");
                                                     rred = ((int)rred > 0) ? (byte)((int)rred - 1) : rred;
                                                 }
-                                                devdetail.Dev.SetColor((byte)rred, (byte)rgreen, (byte)rblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true);
+                                                devdetail.Dev.SetColor((byte)rred, (byte)rgreen, (byte)rblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true, SendRecieveTimeout);
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "green":
@@ -462,9 +464,9 @@ namespace HSPI_MagicHome
                                                         "decreasing Device " + devdetail.Mac + "'s Green Value");
                                                     ggreen = ((int)ggreen > 0) ? (byte)((int)ggreen - 1) : ggreen;
                                                 }
-                                                devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true);
+                                                devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true, SendRecieveTimeout);
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "blue":
@@ -486,8 +488,8 @@ namespace HSPI_MagicHome
                                                         "decreasing Device " + devdetail.Mac + "'s Blue Value");
                                                     bblue = ((int)bblue > 0) ? (byte)((int)bblue - 1) : bblue;
                                                 }
-                                                devdetail.Dev.SetColor((byte)bred, (byte)bgreen, (byte)bblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devdetail.Dev.SetColor((byte)bred, (byte)bgreen, (byte)bblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "warmwhite":
@@ -509,9 +511,9 @@ namespace HSPI_MagicHome
                                                         "decreasing Device " + devdetail.Mac + "'s Warm White Value");
                                                     w1wwhite = ((int)w1wwhite > 0) ? (byte)((int)w1wwhite - 1) : w1wwhite;
                                                 }
-                                                devdetail.Dev.SetColor((byte)w1red, (byte)w1green, (byte)w1blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true);
+                                                devdetail.Dev.SetColor((byte)w1red, (byte)w1green, (byte)w1blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true, SendRecieveTimeout);
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "coolwhite":
@@ -533,9 +535,9 @@ namespace HSPI_MagicHome
                                                         "decreasing Device " + devdetail.Mac + "'s Cool White Value");
                                                     w2cwhite = ((int)w2cwhite > 0) ? (byte)((int)w2cwhite - 1) : w2cwhite;
                                                 }
-                                                devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true);
+                                                devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true, SendRecieveTimeout);
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "preset":
@@ -544,174 +546,174 @@ namespace HSPI_MagicHome
                                                         case "RGB Fade":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s RGB Fade Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.RgbFade,0);
+                                                            devdetail.Dev.SetPreset(PresetMode.RgbFade,0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                        var p1devStatus = devdetail.Dev.GetStatus();
+                                                        var p1devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p1devStatus);
                                                         return;
                                                         case "Red Pulse":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Red Pulse Preset");
-                                                        devdetail.Dev.SetPreset(PresetMode.RedPulse, 0);
+                                                        devdetail.Dev.SetPreset(PresetMode.RedPulse, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                        var p2devStatus = devdetail.Dev.GetStatus();
+                                                        var p2devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p2devStatus);
                                                         return;
                                                         case "Green Pulse":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Green Pulse Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.GreenPulse, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.GreenPulse, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                        var p3devStatus = devdetail.Dev.GetStatus();
+                                                        var p3devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p3devStatus);
                                                         return;
                                                         case "Blue Pulse":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Blue Pulse Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.BluePulse, 0);
-                                                            var p4devStatus = devdetail.Dev.GetStatus();
+                                                            devdetail.Dev.SetPreset(PresetMode.BluePulse, 0, SendRecieveTimeout);
+                                                            var p4devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p4devStatus);
                                                         return;
                                                         case "Yellow Pulse":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Yellow Pulse Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.YellowPulse, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.YellowPulse, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p5devStatus = devdetail.Dev.GetStatus();
+                                                            var p5devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p5devStatus);
                                                         return;
                                                         case "Cyan Pulse":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Cyan Pulse Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.CyanPulse, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.CyanPulse, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p6devStatus = devdetail.Dev.GetStatus();
+                                                            var p6devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p6devStatus);
                                                         return;
                                                         case "Violet Pulse":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Violet Pulse Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.VioletPulse, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.VioletPulse, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p7devStatus = devdetail.Dev.GetStatus();
+                                                            var p7devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p7devStatus);
                                                         return;
                                                         case "White Pulse":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s White Pulse Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.WhitePulse, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.WhitePulse, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p8devStatus = devdetail.Dev.GetStatus();
+                                                            var p8devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p8devStatus);
                                                         return;
                                                         case "Red Green Alternate Pulse":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Red Green Alternate Pulse Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.RedGreenAlternatePulse, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.RedGreenAlternatePulse, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p9devStatus = devdetail.Dev.GetStatus();
+                                                            var p9devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p9devStatus);
                                                         return;
                                                         case "Red Blue Alternate Pulse":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Red Blue Alternate Pulse Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.RedBlueAlternatePulse, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.RedBlueAlternatePulse, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p10devStatus = devdetail.Dev.GetStatus();
+                                                            var p10devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p10devStatus);
                                                         return;
                                                         case "Green Blue Alternate Pulse":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Green Blue Alternate Pulse Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.GreenBlueAlternatePulse, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.GreenBlueAlternatePulse, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p11devStatus = devdetail.Dev.GetStatus();
+                                                            var p11devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p11devStatus);
                                                         return;
                                                         case "Disco Flash":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Disco Flash Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.DiscoFlash, 0);
-                                                            var p12devStatus = devdetail.Dev.GetStatus();
+                                                            devdetail.Dev.SetPreset(PresetMode.DiscoFlash, 0, SendRecieveTimeout);
+                                                            var p12devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p12devStatus);
                                                         return;
                                                         case "Red Flash":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Red Flash Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.RedFlash, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.RedFlash, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p13devStatus = devdetail.Dev.GetStatus();
+                                                            var p13devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p13devStatus);
                                                         return;
                                                         case "Green Flash":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Green Flash Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.GreenFlash, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.GreenFlash, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p14devStatus = devdetail.Dev.GetStatus();
+                                                            var p14devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p14devStatus);
                                                         return;
                                                         case "Blue Flash":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Blue Flash Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.BlueFlash, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.BlueFlash, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p15devStatus = devdetail.Dev.GetStatus();
+                                                            var p15devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p15devStatus);
                                                         return;
                                                         case "Yellow Flash":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Yellow Flash Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.YellowFlash, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.YellowFlash, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p16devStatus = devdetail.Dev.GetStatus();
+                                                            var p16devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p16devStatus);
                                                         return;
                                                         case "Cyan Flash":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Cyan Flash Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.CyanFlash, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.CyanFlash, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p17devStatus = devdetail.Dev.GetStatus();
+                                                            var p17devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p17devStatus);
                                                         return;
                                                         case "Violet Flash":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Violet Flash Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.VioletFlash, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.VioletFlash, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p18devStatus = devdetail.Dev.GetStatus();
+                                                            var p18devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p18devStatus);
                                                         return;
                                                         case "White Flash":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s White Flash Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.WhiteFlash, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.WhiteFlash, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var p19devStatus = devdetail.Dev.GetStatus();
+                                                            var p19devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p19devStatus);
                                                         return;
                                                         case "Colour Change":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Colour Change Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.ColorChange, 0);
-                                                            var p20devStatus = devdetail.Dev.GetStatus();
+                                                            devdetail.Dev.SetPreset(PresetMode.ColorChange, 0, SendRecieveTimeout);
+                                                            var p20devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, p20devStatus);
                                                         return;
                                                         case "Normal RGB":
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Normal RGB Mode Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.NormalRgb, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.NormalRgb, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var pdevStatus = devdetail.Dev.GetStatus();
+                                                            var pdevStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, pdevStatus);
                                                         return;
                                                         default:
                                                             Logger.LogDebug(
                                                                 "Setting Device " + devdetail.Mac + "'s Normal RGB Mode Preset");
-                                                            devdetail.Dev.SetPreset(PresetMode.NormalRgb, 0);
+                                                            devdetail.Dev.SetPreset(PresetMode.NormalRgb, 0, SendRecieveTimeout);
                                                             Thread.Sleep(1000);
-                                                            var dpdevStatus = devdetail.Dev.GetStatus();
+                                                            var dpdevStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                             UpdateMagicHomeDevice(discovery, devdetail.Dev, dpdevStatus);
                                                         return;
                                                     }
@@ -796,9 +798,9 @@ namespace HSPI_MagicHome
                                                 var mcwhite = (devStatus.White2 > 0) ? (mvalDiff >= 0) ? ((((int)devStatus.White2 + mvalDiff) <= 255) ? ((int)devStatus.White2 + mvalDiff) : 255) : ((((int)devStatus.White2 + mvalDiff) >= 0) ? ((int)devStatus.White2 + mvalDiff) : 1) : 0;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s brightness to " + value);
-                                                devdetail.Dev.SetColor((byte)mred, (byte)mgreen, (byte)mblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)mwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)mcwhite : (byte?)null, true, true);
+                                                devdetail.Dev.SetColor((byte)mred, (byte)mgreen, (byte)mblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)mwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)mcwhite : (byte?)null, true, true, SendRecieveTimeout);
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "colour":
@@ -809,9 +811,9 @@ namespace HSPI_MagicHome
                                                 var ccwhite = devStatus.White2;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Colour to " +hexValue);
-                                                devdetail.Dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true);
+                                                devdetail.Dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true, SendRecieveTimeout);
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "red":
@@ -822,9 +824,9 @@ namespace HSPI_MagicHome
                                                 var rcwhite = devStatus.White2;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Red Value to " + value);
-                                                devdetail.Dev.SetColor((byte)rred, (byte)rgreen, (byte)rblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true);
+                                                devdetail.Dev.SetColor((byte)rred, (byte)rgreen, (byte)rblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true, SendRecieveTimeout);
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "green":
@@ -835,9 +837,9 @@ namespace HSPI_MagicHome
                                                 var gcwhite = devStatus.White2;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Green Value to " + value);
-                                                devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true);
+                                                devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true, SendRecieveTimeout);
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "blue":
@@ -848,9 +850,9 @@ namespace HSPI_MagicHome
                                                 var bcwhite = devStatus.White2;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Blue Value to " + value);
-                                                devdetail.Dev.SetColor((byte)bred, (byte)bgreen, (byte)bblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true);
+                                                devdetail.Dev.SetColor((byte)bred, (byte)bgreen, (byte)bblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true, SendRecieveTimeout);
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "warmwhite":
@@ -861,9 +863,9 @@ namespace HSPI_MagicHome
                                                 var w1cwhite = devStatus.White2;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Warm White Value to " + value);
-                                                devdetail.Dev.SetColor((byte)w1red, (byte)w1green, (byte)w1blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true);
+                                                devdetail.Dev.SetColor((byte)w1red, (byte)w1green, (byte)w1blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true, SendRecieveTimeout);
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "coolwhite":
@@ -874,11 +876,26 @@ namespace HSPI_MagicHome
                                                 var w2cwhite = (byte)value;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Cool White Value to " + value);
-                                                devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true);
+                                                devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true, SendRecieveTimeout);
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus();
+                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
+                                            case "preset":
+                                                var curMode = devStatus.Mode;
+                                                if (curMode == PresetMode.NormalRgb)
+                                                {
+                                                    Logger.LogDebug(
+                                                        "Setting preset mode speed for Device " + devdetail.Mac + " is not valid for Normal RGB Mode");
+                                                }
+                                                else
+                                                {
+                                                    Logger.LogDebug(
+                                                        "Setting Device " + devdetail.Mac + "'s Preset Speed to " + value + "%");
+                                                    devdetail.Dev.SetPreset(curMode, (int)value, SendRecieveTimeout);
+                                                }
+                                                
+                                                break;
                                             default:
                                                 Logger.LogError(
                                                     "Device Type  is not recognised, most likely because the device address has been changed, please restart the plugin to correct");
@@ -1210,7 +1227,7 @@ namespace HSPI_MagicHome
                                 }
                                 if (dev != null)
                                 {
-                                    var devStatus = dev.GetStatus();
+                                    var devStatus = dev.GetStatus(SendRecieveTimeout);
                                     var devDetail = new DevDetail()
                                     {
                                         Mac = discovery.MacAddress.ToString(),
@@ -1234,7 +1251,7 @@ namespace HSPI_MagicHome
                                     if (DevDetailsList.Count < deviceFindResults.Length)
                                     {
                                         var initDev = GetDevice(discovery);
-                                        var initDevStatus = initDev.GetStatus();
+                                        var initDevStatus = initDev.GetStatus(SendRecieveTimeout);
                                         var initDevDetail = new DevDetail()
                                         {
                                             Mac = discovery.MacAddress.ToString(),
@@ -1752,6 +1769,18 @@ namespace HSPI_MagicHome
                 devType = DeviceType.Rgb;
             }
             return devType;
+        }
+
+        public int SendRecieveTimeout
+        {
+            get => _mTimeOut;
+            set
+            {
+                _mTimeOut =  value;
+                MHs.SaveINISetting("GENERAL", "send_receive_timeout", _mTimeOut.ToString(), IniFile);
+                Logger.LogDebug(
+                    "Writing the Log to File Level " + Logger.FileLogLevel + " to the MagicHome config file " + IniFile);
+            }
         }
 
         public string LogToFileLevel

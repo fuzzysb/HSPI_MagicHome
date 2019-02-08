@@ -16,11 +16,10 @@ namespace HSPI_MagicHome
     public class Actions
     {
 
-        MagicHomeApp instance = MagicHomeApp.GetInstance();
-
         private static readonly List<ActionType> s_actionTypeList = new List<ActionType>()
         {
-            new ActionType("Set Colour")
+            new ActionType("Set Colour"),
+            new ActionType("Set Preset")
         };
 
         private const string m_pageName = "Events";
@@ -29,11 +28,14 @@ namespace HSPI_MagicHome
 
         public string ActionBuildUI(string sUnique, IPlugInAPI.strTrigActInfo actInfo)
         {
+            var instance = MagicHomeApp.GetInstance();
             var stringBuilder = new StringBuilder();
             var str1 = actInfo.UID.ToString() + sUnique;
             var actionType = "";
             var str2 = "";
             var str3 = "";
+            var str4 = "";
+            var str5 = "";
             if (actInfo.DataIn != null)
             {
                 var queryString = HttpUtility.ParseQueryString(Encoding.ASCII.GetString(actInfo.DataIn));
@@ -47,6 +49,10 @@ namespace HSPI_MagicHome
                             str2 = queryString[allKey];
                         else if (allKey.StartsWith("colour_"))
                             str3 = queryString[allKey];
+                        else if (allKey.StartsWith("preset_"))
+                            str4 = queryString[allKey];
+                        else if (allKey.StartsWith("speed_"))
+                            str5 = queryString[allKey];
                     }
                 }
             }
@@ -59,38 +65,91 @@ namespace HSPI_MagicHome
             stringBuilder.Append(jqDropList1.Build());
             if (actionType1 != null)
             {
-                var jqDropList2 = new clsJQuery.jqDropList("light_" + str1, m_pageName, true);
-                jqDropList2.AddItem("--Please Select--", "-1", false);
-
-                var jqColorPicker3 = new clsJQuery.jqColorPicker("colour_" + str1, m_pageName, 40, "000000");
-
-                if (MagicHomeApp.deviceFindResults != null)
+                if (actionType1.Name == "Set Colour")
                 {
-                    if (MagicHomeApp.deviceFindResults.Length > 0)
+                    var jqDropList2 = new clsJQuery.jqDropList("light_" + str1, m_pageName, true);
+                    jqDropList2.AddItem("--Please Select--", "-1", false);
+
+                    var jqColorPicker3 = new clsJQuery.jqColorPicker("colour_" + str1, m_pageName, 40, "000000");
+
+                    if (MagicHomeApp.deviceFindResults != null)
                     {
-                        foreach (var discovery in MagicHomeApp.deviceFindResults)
+                        if (MagicHomeApp.deviceFindResults.Length > 0)
                         {
-                            var deviceClass = instance.FindDeviceById(discovery.MacAddress + " Colour", discovery.MacAddress.ToString());
-                            jqDropList2.AddItem(deviceClass.get_Name(instance.Hs), deviceClass.get_Name(instance.Hs), deviceClass.get_Name(instance.Hs) == str2);
+                            foreach (var discovery in MagicHomeApp.deviceFindResults)
+                            {
+                                var deviceClass = instance.FindDeviceById(discovery.MacAddress + " Colour", discovery.MacAddress.ToString());
+                                jqDropList2.AddItem(deviceClass.get_Name(instance.Hs), deviceClass.get_Name(instance.Hs), deviceClass.get_Name(instance.Hs) == str2);
+                            }
                         }
                     }
+
+
+
+                    stringBuilder.Append("<br>Light:");
+                    stringBuilder.Append(jqDropList2.Build());
+                    var lightSelection = jqDropList2.items.Find(selected => selected.Name == str2);
+                    if (lightSelection.Name != null)
+                    {
+                        stringBuilder.Append("<br>Colour:");
+                        stringBuilder.Append(jqColorPicker3.Build());
+                        var bcolor = new clsJQuery.jqButton("colorbutton", "Submit", m_pageName, true);
+                        stringBuilder.Append(bcolor.Build());
+                        str3 = jqColorPicker3.color;
+
+                    }
+                    stringBuilder.Append("<br>");
                 }
-
-                
-
-                stringBuilder.Append("<br>Light:");
-                stringBuilder.Append(jqDropList2.Build());
-                var lightSelection = jqDropList2.items.Find(selected => selected.Name == str2);
-                if (lightSelection.Name != null)
+                else if (actionType1.Name == "Set Preset")
                 {
-                    stringBuilder.Append("<br>Colour:");
-                    stringBuilder.Append(jqColorPicker3.Build());
-                    var bcolor = new clsJQuery.jqButton("colorbutton", "Submit", m_pageName, true);
-                    stringBuilder.Append(bcolor.Build());
-                    str3 = jqColorPicker3.color;
+                    var jqDropList2 = new clsJQuery.jqDropList("light_" + str1, m_pageName, true);
+                    jqDropList2.AddItem("--Please Select--", "-1", false);
 
+                    var jqDropList3 = new clsJQuery.jqDropList("preset_" + str1, m_pageName, true);
+                    jqDropList3.AddItem("--Please Select--", "-1", false);
+
+                    var jqSpeedSlider4 = new clsJQuery.jqSlider("speed_" + str1, 1, 100, (str5 != null)? int.Parse(str5) : 50, clsJQuery.jqSlider.jqSliderOrientation.horizontal, 150, m_pageName, true ); 
+
+                    if (MagicHomeApp.deviceFindResults != null)
+                    {
+                        if (MagicHomeApp.deviceFindResults.Length > 0)
+                        {
+                            foreach (var discovery in MagicHomeApp.deviceFindResults)
+                            {
+                                var deviceClass = instance.FindDeviceById(discovery.MacAddress + " Preset", discovery.MacAddress.ToString());
+                                jqDropList2.AddItem(deviceClass.get_Name(instance.Hs), deviceClass.get_Name(instance.Hs), deviceClass.get_Name(instance.Hs) == str2);
+                            }
+
+                            foreach (var preset in Enum.GetNames(typeof(PresetMode)))
+                            {
+                                jqDropList3.AddItem(preset, preset, preset == str4);
+                            }
+                        }
+                    }
+
+
+
+
+                    stringBuilder.Append("<br>Light:");
+                    stringBuilder.Append(jqDropList2.Build());
+                    var lightSelection = jqDropList2.items.Find(selected => selected.Name == str2);
+                    if (lightSelection.Name != null)
+                    {
+                        stringBuilder.Append("<br>Preset:");
+                        stringBuilder.Append(jqDropList3.Build());
+                        var presetSelection = jqDropList3.items.Find(selected => selected.Name == str4);
+                        if (presetSelection.Name != null)
+                        {
+                            stringBuilder.Append("<br>Speed:");
+                            stringBuilder.Append(jqSpeedSlider4.build());
+                            str5 = jqSpeedSlider4.ToString();
+                        }
+                        
+                        
+                    }
+                    stringBuilder.Append("<br>");
                 }
-                stringBuilder.Append("<br>");
+                
             }
             return stringBuilder.ToString();
         }
@@ -109,6 +168,9 @@ namespace HSPI_MagicHome
             var str1 = "";
             var str2 = "";
             var str3 = "";
+            var str4 = "";
+            var str5 = "";
+            var instance = MagicHomeApp.GetInstance();
             var queryString = HttpUtility.ParseQueryString(Encoding.ASCII.GetString(actInfo.DataIn));
             foreach (var allKey in queryString.AllKeys)
             {
@@ -120,6 +182,10 @@ namespace HSPI_MagicHome
                         str2 = queryString[allKey];
                     else if (allKey.StartsWith("colour_"))
                         str3 = queryString[allKey];
+                    else if (allKey.StartsWith("preset_"))
+                        str4 = queryString[allKey];
+                    else if (allKey.StartsWith("speed_"))
+                        str5 = queryString[allKey];
                 }
             }
 
@@ -139,9 +205,21 @@ namespace HSPI_MagicHome
                 }
             }
 
-            var result = s_actionTypeList.Find(actType => actType.Name == act) != null && str1 != "-1" &&
-                         !string.IsNullOrEmpty(str2) && !string.IsNullOrEmpty(str3);
-            return result;
+            if (act == "Set Colour")
+            {
+                var result = s_actionTypeList.Find(actType => actType.Name == act) != null && str1 != "-1" &&
+                             !string.IsNullOrEmpty(str2) && !string.IsNullOrEmpty(str3);
+                return result;
+            }
+            else if (act == "Set Preset")
+            {
+                var result = s_actionTypeList.Find(actType => actType.Name == act) != null && str1 != "-1" &&
+                             (!string.IsNullOrEmpty(str2) && str2 != "-1") && (!string.IsNullOrEmpty(str4) && str4 != "-1") && !string.IsNullOrEmpty(str5);
+                return result;
+            }
+
+            return false;
+
         }
 
         public string ActionFormatUI(IPlugInAPI.strTrigActInfo actInfo)
@@ -152,6 +230,9 @@ namespace HSPI_MagicHome
             var act = "";
             var key = "";
             var s1 = "";
+            var s2 = "";
+            var s3 = "";
+            var instance = MagicHomeApp.GetInstance();
             var queryString = HttpUtility.ParseQueryString(Encoding.ASCII.GetString(actInfo.DataIn));
             foreach (var allKey in queryString.AllKeys)
             {
@@ -163,6 +244,10 @@ namespace HSPI_MagicHome
                         key = queryString[allKey];
                     else if (allKey.StartsWith("colour_"))
                         s1 = queryString[allKey];
+                    else if (allKey.StartsWith("preset_"))
+                        s2 = queryString[allKey];
+                    else if (allKey.StartsWith("speed_"))
+                        s3 = queryString[allKey];
                 }
             }
             if (s_actionTypeList.Find(actType => actType.Name == act) == null)
@@ -173,10 +258,19 @@ namespace HSPI_MagicHome
             else
                 str2 = str1 + "MagicHome - " + instance.Instance + ": " + act;
             //var st2 = key;
-            
-            var result = str2 + "<br>Light=" + HttpUtility.HtmlEncode(key) + "<br>Colour=" + HttpUtility.HtmlEncode(s1);
+            if(act == "Set Colour")
+            {
+                var result = str2 + "<br>Light=" + HttpUtility.HtmlEncode(key) + "<br>Colour=" + HttpUtility.HtmlEncode(s1);
+                return result;
+            }
 
-            return result;
+            if (act == "Set Preset")
+            {
+                var result = str2 + "<br>Light=" + HttpUtility.HtmlEncode(key) + "<br>Preset=" + HttpUtility.HtmlEncode(s2) + "<br>Speed=" + HttpUtility.HtmlEncode(s3);
+                return result;
+            }
+
+            return null;
         }
 
         public bool ActionReferencesDevice(IPlugInAPI.strTrigActInfo actInfo, int dvRef)
@@ -190,7 +284,9 @@ namespace HSPI_MagicHome
             var flag = false;
             var light = "";
             var colour = "";
-
+            var preset = "";
+            var speed = "";
+            var instance = MagicHomeApp.GetInstance();
             if (actInfo.DataIn != null)
             {
                 var coll = HttpUtility.ParseQueryString(Encoding.ASCII.GetString(actInfo.DataIn));
@@ -205,6 +301,10 @@ namespace HSPI_MagicHome
                             light = coll[s];
                         else if (allKey.StartsWith("colour_"))
                             colour = coll[s];
+                        else if (allKey.StartsWith("preset_"))
+                            preset = coll[s];
+                        else if (allKey.StartsWith("speed_"))
+                            speed = coll[s];
                     }
                 }
             }
@@ -230,8 +330,32 @@ namespace HSPI_MagicHome
                                             var colours = MagicHomeApp.ConvertToRgb(colour);
                                             var cwwhite = devStatus.White1;
                                             var ccwhite = devStatus.White2;
-                                            devdetail.Dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true);
-                                            devStatus = devdetail.Dev.GetStatus();
+                                            devdetail.Dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true, instance.SendRecieveTimeout);
+                                            devStatus = devdetail.Dev.GetStatus(instance.SendRecieveTimeout);
+                                            instance.UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
+                                        }
+                                    }
+                                }
+                            }
+                            //SetColor 
+                            flag = true;
+                        }
+                        else if (actionType.Name == "Set Preset")
+                        {
+                            if (MagicHomeApp.deviceFindResults != null)
+                            {
+                                if (MagicHomeApp.deviceFindResults.Length > 0)
+                                {
+                                    foreach (var discovery in MagicHomeApp.deviceFindResults)
+                                    {
+                                        var hsDev = instance.FindDeviceById(discovery.MacAddress + " Preset", discovery.MacAddress.ToString());
+                                        if (light == hsDev.get_Name(instance.Hs))
+                                        {
+                                            var devdetail = instance.DevDetailsList.Find(x => x.Mac == discovery.MacAddress.ToString());
+                                            var devStatus = devdetail.DevStatus;
+                                            var devPreset = (PresetMode)Enum.Parse(typeof(PresetMode), preset);
+                                            devdetail.Dev.SetPreset(devPreset, int.Parse(speed), instance.SendRecieveTimeout);
+                                            devStatus = devdetail.Dev.GetStatus(instance.SendRecieveTimeout);
                                             instance.UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                         }
                                     }
