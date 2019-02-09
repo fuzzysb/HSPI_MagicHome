@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading;
 
 namespace MagicHomeAPI
@@ -35,8 +36,8 @@ namespace MagicHomeAPI
 
                 var response = SendMessage(message, false, timeOut, true);
 
-                if (response.Length != 12)
-                    throw new Exception("Controller sent wrong number of bytes while getting status");
+                if (response.Length >= 11)
+                    throw new Exception("Controller sent wrong number of bytes while getting status, the number of bytes received was " + response.Length + " however we were expecting at least 11 ,the values received were " + PrintByteArray(response));
 
 
                 return new DeviceStatus
@@ -59,7 +60,7 @@ namespace MagicHomeAPI
                 var response = SendMessage(message, false, timeOut, true);
 
                 if (response.Length != 14)
-                    throw new Exception("Controller sent wrong number of bytes while getting status");
+                    throw new Exception("Controller sent wrong number of bytes while getting status, the number of bytes received was " + response.Length + " however we were expecting 14 ,the values received were " + PrintByteArray(response));
 
                 return new DeviceStatus
                 {
@@ -75,6 +76,17 @@ namespace MagicHomeAPI
                     White2 = response[11] //TODO: check if this is correct
                 };
             }
+        }
+
+        private string PrintByteArray(byte[] bytes)
+        {
+            var sb = new StringBuilder("{ ");
+            foreach (var b in bytes)
+            {
+                sb.Append(b + ", ");
+            }
+            sb.Append("}");
+            return sb.ToString();
         }
 
         public void SetPowerState(PowerState state, int timeOut)

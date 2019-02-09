@@ -153,6 +153,13 @@ namespace HSPI_MagicHome
                 stringBuilder.AppendLine("</td></tr>");
             }
             stringBuilder.AppendLine("</td>");
+            stringBuilder.AppendLine("<tr><td class='tableheader' colspan='7'>Light Discovery</td>");
+            stringBuilder.AppendLine("<tr>");
+            stringBuilder.AppendLine("<td class='tablecell' align='left' colspan='7'>");
+            var jqButton = new clsJQuery.jqButton("retrydiscovery", "Retry Discovery",
+                PageName, false);
+            stringBuilder.AppendLine(jqButton.Build());
+            stringBuilder.AppendLine("</td>");
             stringBuilder.AppendLine("</table>");
             return stringBuilder.ToString();
         }

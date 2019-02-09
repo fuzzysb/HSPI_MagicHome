@@ -300,6 +300,7 @@ namespace HSPI_MagicHome
                         _mPollingTimer = new System.Timers.Timer(120000.0) { AutoReset = true };
                         _mPollingTimer.Elapsed += PollDevices;
                         _mPollingTimer.Start();
+                        PollDevices(null, null);
                     }
                     catch (Exception ex)
                     {
@@ -1034,7 +1035,7 @@ namespace HSPI_MagicHome
                 var devArray = deviceFindResultsList.DistinctBy(x => x.MacAddress).ToArray();
                 if (devArray.Length > deviceFindResults.Length)
                 {
-                    Logger.LogDebug("New Devices were discovered, Proceeding to Create Devices");
+                    Logger.LogDebug(devArray.Length - deviceFindResults.Length + " New Devices were discovered, Proceeding to Create Devices upon the next Device Poll");
                     deviceFindResults = deviceFindResultsList.DistinctBy(x => x.MacAddress).ToArray();
                 }
                 else
@@ -1669,7 +1670,19 @@ namespace HSPI_MagicHome
                     }
                 }
             }
+
             
+
+            if (parts["id"] == "timeout")
+            {
+                SendRecieveTimeout = int.Parse(parts["timeout"]);
+            }
+
+            if (parts["id"] == "loglevel")
+            {
+                LogLevel = parts["loglevel"];
+            }
+
             if (parts["id"] == "loglevel")
             {
                 LogLevel = parts["loglevel"];
@@ -1685,6 +1698,13 @@ namespace HSPI_MagicHome
             {
                 LogToFileLevel = parts["fileloglevel"];
             }
+
+            if (parts["id"] == "retrydiscovery")
+            {
+                PollDiscoveryAsync(null, null);
+            }
+
+            
 
             return _mConfigPage.postBackProc(page, data, user, userRights);
         }
@@ -1779,7 +1799,7 @@ namespace HSPI_MagicHome
                 _mTimeOut =  value;
                 MHs.SaveINISetting("GENERAL", "send_receive_timeout", _mTimeOut.ToString(), IniFile);
                 Logger.LogDebug(
-                    "Writing the Log to File Level " + Logger.FileLogLevel + " to the MagicHome config file " + IniFile);
+                    "Writing the Send/Receive Timeout to " + SendRecieveTimeout + " to the MagicHome config file " + IniFile);
             }
         }
 
