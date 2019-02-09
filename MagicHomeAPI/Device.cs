@@ -36,7 +36,7 @@ namespace MagicHomeAPI
 
                 var response = SendMessage(message, false, timeOut, true);
 
-                if (response.Length >= 11)
+                if (response.Length <= 11)
                     throw new Exception("Controller sent wrong number of bytes while getting status, the number of bytes received was " + response.Length + " however we were expecting at least 11 ,the values received were " + PrintByteArray(response));
 
 
