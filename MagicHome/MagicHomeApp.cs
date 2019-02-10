@@ -16,7 +16,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Web;
-using System.Xml;
 using HomeSeerAPI;
 using MagicHomeAPI;
 using MoreLinq;
@@ -26,10 +25,14 @@ using Scheduler.Classes;
 
 namespace HSPI_MagicHome
 {
+    /// <summary>
+    /// </summary>
     internal partial class MagicHomeApp
     {
+        /// <summary>
+        /// </summary>
         internal static DeviceFindResult[] deviceFindResults { get; set; }
-        private static MagicHomeApp _sObjSingletonInstance = (MagicHomeApp)null;
+        private static MagicHomeApp _sObjSingletonInstance = null as MagicHomeApp;
         private static readonly object SObjLock = new object();
         private string _mInstance = "";
         private int _mTimeOut { get; set; }
@@ -45,7 +48,13 @@ namespace HSPI_MagicHome
         private System.Timers.Timer _mPollingTimer;
         private System.Timers.Timer _mDiscoveryTimer;
         private readonly Dictionary<string, MagicHomeDevices> _mMagicHome = new Dictionary<string, MagicHomeDevices>();
+
+        /// <summary>
+        /// </summary>
         public Triggers Triggers { get; protected set; }
+
+        /// <summary>
+        /// </summary>
         public Actions Actions { get; protected set; }
         private WebConfig _mConfigPage;
         private bool isReg { get; set; }
@@ -56,11 +65,15 @@ namespace HSPI_MagicHome
         /// </summary>
         internal List<DevDetail> DevDetailsList { get; set; }
 
+        /// <summary>
+        /// </summary>
         private MagicHomeApp()
         {
 
         }
 
+        /// <summary>
+        /// </summary>
         public bool IsNull(object checkobject)
         {
             try
@@ -80,24 +93,32 @@ namespace HSPI_MagicHome
             }
         }
 
+        /// <summary>
+        /// </summary>
         internal int AccessLevel()
         {
             return int.Parse(AccessLevelPriv());
         }
 
+        /// <summary>
+        /// </summary>
         internal string AccessLevelPriv()
         {
             return DecryptCertificate("i0pxNChIi3DP8DCrLMhJdHHyLjSqcLS1BQA=");
         }
 
+        /// <summary>
+        /// </summary>
         public string IniFile => _mIniFile;
-
+        
+        /// <summary>
+        /// </summary>
         private string GetPublicIp()
         {
             Classes.IpInfo ipInfo = new Classes.IpInfo();
             try
             {
-                string info = new WebClient().DownloadString("http://ipinfo.io/json");
+                string info = new WebClient().DownloadString(@"http://ipinfo.io/json");
                 ipInfo = JsonConvert.DeserializeObject<Classes.IpInfo>(info);
             }
             catch (Exception)
@@ -165,7 +186,9 @@ namespace HSPI_MagicHome
             var macs = string.Join(",", macarr);
             return macs;
         }
-
+       
+        /// <summary>
+        /// </summary>
         public string Init()
         {
             var str1 = "";
@@ -328,7 +351,9 @@ namespace HSPI_MagicHome
             }
             return str1;
         }
-
+        
+        /// <summary>
+        /// </summary>
         public void Shutdown()
         {
             try
@@ -347,12 +372,16 @@ namespace HSPI_MagicHome
             }
         }
 
+        /// <summary>
+        /// </summary>
         public IHSApplication Hs
         {
             get => MHs;
             set => MHs = value;
         }
 
+        /// <summary>
+        /// </summary>
         public void ButtonPress(string buttonName, double value, int dvref)
         {
             if (regMod == Enums.REGISTRATION_MODES.REG_REGISTERED || regMod == Enums.REGISTRATION_MODES.REG_TRIAL)
@@ -370,11 +399,10 @@ namespace HSPI_MagicHome
         {
             try
             {
-                DeviceClass deviceByRef = (DeviceClass)this.MHs.GetDeviceByRef(dvref);
+                DeviceClass deviceByRef = (DeviceClass)MHs.GetDeviceByRef(dvref);
                 if (deviceByRef == null)
                     return;
-                string magicHomeId;
-                var deviceId = this.GetDeviceId(deviceByRef, out magicHomeId);
+                var deviceId = GetDeviceId(deviceByRef, out var magicHomeId);
                 if (magicHomeId == null || deviceId == null)
                 {
                     Logger.LogError("Cannot find Magic Home device {0}", (object)magicHomeId);
@@ -427,7 +455,7 @@ namespace HSPI_MagicHome
                                                 var rgreen = devStatus.Green;
                                                 var rblue = devStatus.Blue;
                                                 var rwwhite = devStatus.White1;
-                                                var rcwhite = devStatus.White2;
+                                                var rcwhite = devStatus.White2 ;
                                                 if (buttonName == "Up")
                                                 {
                                                     Logger.LogDebug(
@@ -753,6 +781,8 @@ namespace HSPI_MagicHome
             }
         }
 
+        /// <summary>
+        /// </summary>
         internal void SetControlValue(int dvref, double value)
         {
             try
@@ -929,6 +959,8 @@ namespace HSPI_MagicHome
             }
         }
 
+        /// <summary>
+        /// </summary>
         public void HsEvent(Enums.HSEvent eventType, object[] parms)
         {
             try
@@ -944,6 +976,8 @@ namespace HSPI_MagicHome
             }
         }
 
+        /// <summary>
+        /// </summary>
         public string GetPagePlugin(string page, string user, int userRights, string queryString)
         {
             if (_mInstance != "")
@@ -951,6 +985,8 @@ namespace HSPI_MagicHome
             return _mConfigPage.GetPagePlugin(page, user, userRights, queryString);
         }
 
+        /// <summary>
+        /// </summary>
         public void PollDevices(object source, ElapsedEventArgs e)
         {
             Logger.LogDebug(
@@ -961,6 +997,8 @@ namespace HSPI_MagicHome
             }
         }
 
+        /// <summary>
+        /// </summary>
         public void PollDiscoveryAsync(object source, ElapsedEventArgs e)
         {
             Logger.LogDebug(
@@ -1328,6 +1366,8 @@ namespace HSPI_MagicHome
             return await Task.FromResult(returnValue);
         }
 
+        /// <summary>
+        /// </summary>
         internal void UpdateMagicHomeDevice(DeviceFindResult discovery, Device dev, DeviceStatus devStatus)
         {
             if (devStatus != null)
@@ -1342,150 +1382,156 @@ namespace HSPI_MagicHome
                 DeviceClass dev7;
                 DeviceClass dev8;
 
-                if (_mMagicHome.ContainsKey(discovery.MacAddress.ToString()))
+                lock (_mUpdateLock)
                 {
-                    deviceClass = _mMagicHome[discovery.MacAddress.ToString()].RootDevice;
-                    dev1 = _mMagicHome[discovery.MacAddress.ToString()].Mode;
-                    dev2 = _mMagicHome[discovery.MacAddress.ToString()].Colour;
-                    dev3 = _mMagicHome[discovery.MacAddress.ToString()].Red;
-                    dev4 = _mMagicHome[discovery.MacAddress.ToString()].Green;
-                    dev5 = _mMagicHome[discovery.MacAddress.ToString()].Blue;
-                    dev6 = _mMagicHome[discovery.MacAddress.ToString()].WarmWhite;
-                    dev7 = _mMagicHome[discovery.MacAddress.ToString()].CoolWhite;
-                    dev8 = _mMagicHome[discovery.MacAddress.ToString()].Preset;
-                }
-                else
-                {
-                    deviceClass = this.FindDeviceById("root", discovery.MacAddress.ToString());
-                    if (deviceClass == null)
+                    if (_mMagicHome.ContainsKey(discovery.MacAddress.ToString()))
                     {
-                        deviceClass = CreateRootDevice(discovery, dev, devStatus, false);
+                        deviceClass = _mMagicHome[discovery.MacAddress.ToString()].RootDevice;
+                        dev1 = _mMagicHome[discovery.MacAddress.ToString()].Mode;
+                        dev2 = _mMagicHome[discovery.MacAddress.ToString()].Colour;
+                        dev3 = _mMagicHome[discovery.MacAddress.ToString()].Red;
+                        dev4 = _mMagicHome[discovery.MacAddress.ToString()].Green;
+                        dev5 = _mMagicHome[discovery.MacAddress.ToString()].Blue;
+                        dev6 = _mMagicHome[discovery.MacAddress.ToString()].WarmWhite;
+                        dev7 = _mMagicHome[discovery.MacAddress.ToString()].CoolWhite;
+                        dev8 = _mMagicHome[discovery.MacAddress.ToString()].Preset;
                     }
                     else
                     {
-                        UpdateRootDeviceVsvgPairs(deviceClass, discovery, dev, devStatus, false);
-                    }
-
-                    dev1 = this.FindDeviceById(discovery.MacAddress.ToString(), discovery.MacAddress.ToString());
-                    if (dev1 == null)
-                    {
-                        dev1 = CreateMagicHomeModeDevice(discovery, dev, devStatus, deviceClass);
-                    }
-                    else
-                    {
-                        UpdateMagicHomeModeVsvgPairs(dev1, discovery, dev, devStatus);
-                    }
-
-                    dev2 = this.FindDeviceById(discovery.MacAddress + " Colour", discovery.MacAddress.ToString());
-                    if (dev2 == null)
-                    {
-                        dev2 = CreateMagicHomeColourDevice(discovery, dev, devStatus, deviceClass);
-                    }
-                    else
-                    {
-                        UpdateMagicHomeColourVsvgPairs(dev2, discovery, dev, devStatus);
-                    }
-
-                    if (dev._deviceType == DeviceType.Rgb || dev._deviceType == DeviceType.RgbWarmwhite ||
-                        dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb)
-                    {
-                        dev3 = this.FindDeviceById(discovery.MacAddress + " Red", discovery.MacAddress.ToString());
-                        if (dev3 == null)
+                        deviceClass = this.FindDeviceById("root", discovery.MacAddress.ToString());
+                        if (deviceClass == null)
                         {
-                            dev3 = CreateMagicHomeRedDevice(discovery, dev, devStatus, deviceClass);
+                            deviceClass = CreateRootDevice(discovery, dev, devStatus, false);
                         }
                         else
                         {
-                            UpdateMagicHomeRedVsvgPairs(dev3, discovery, dev, devStatus);
+                            UpdateRootDeviceVsvgPairs(deviceClass, discovery, dev, devStatus, false);
                         }
 
-                        dev4 = this.FindDeviceById(discovery.MacAddress + " Green", discovery.MacAddress.ToString());
-                        if (dev4 == null)
+                        dev1 = this.FindDeviceById(discovery.MacAddress.ToString(), discovery.MacAddress.ToString());
+                        if (dev1 == null)
                         {
-                            dev4 = CreateMagicHomeGreenDevice(discovery, dev, devStatus, deviceClass);
+                            dev1 = CreateMagicHomeModeDevice(discovery, dev, devStatus, deviceClass);
                         }
                         else
                         {
-                            UpdateMagicHomeGreenVsvgPairs(dev4, discovery, dev, devStatus);
+                            UpdateMagicHomeModeVsvgPairs(dev1, discovery, dev, devStatus);
                         }
 
-                        dev5 = this.FindDeviceById(discovery.MacAddress + " Blue", discovery.MacAddress.ToString());
-                        if (dev5 == null)
+                        dev2 = this.FindDeviceById(discovery.MacAddress + " Colour", discovery.MacAddress.ToString());
+                        if (dev2 == null)
                         {
-                            dev5 = CreateMagicHomeBlueDevice(discovery, dev, devStatus, deviceClass);
+                            dev2 = CreateMagicHomeColourDevice(discovery, dev, devStatus, deviceClass);
                         }
                         else
                         {
-                            UpdateMagicHomeBlueVsvgPairs(dev5, discovery, dev, devStatus);
+                            UpdateMagicHomeColourVsvgPairs(dev2, discovery, dev, devStatus);
                         }
-                    }
-                    else
-                    {
-                        dev3 = null;
-                        dev4 = null;
-                        dev5 = null;
-                    }
 
-
-
-                    if (dev._deviceType == DeviceType.RgbWarmwhite ||
-                        dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb)
-                    {
-                        dev6 = this.FindDeviceById(discovery.MacAddress + " Warm White",
-                            discovery.MacAddress.ToString());
-                        if (dev6 == null)
+                        if (dev._deviceType == DeviceType.Rgb || dev._deviceType == DeviceType.RgbWarmwhite ||
+                            dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb)
                         {
-                            dev6 = CreateMagicHomeWarmWhiteDevice(discovery, dev, devStatus, deviceClass);
+                            dev3 = this.FindDeviceById(discovery.MacAddress + " Red", discovery.MacAddress.ToString());
+                            if (dev3 == null)
+                            {
+                                dev3 = CreateMagicHomeRedDevice(discovery, dev, devStatus, deviceClass);
+                            }
+                            else
+                            {
+                                UpdateMagicHomeRedVsvgPairs(dev3, discovery, dev, devStatus);
+                            }
+
+                            dev4 = this.FindDeviceById(discovery.MacAddress + " Green", discovery.MacAddress.ToString());
+                            if (dev4 == null)
+                            {
+                                dev4 = CreateMagicHomeGreenDevice(discovery, dev, devStatus, deviceClass);
+                            }
+                            else
+                            {
+                                UpdateMagicHomeGreenVsvgPairs(dev4, discovery, dev, devStatus);
+                            }
+
+                            dev5 = this.FindDeviceById(discovery.MacAddress + " Blue", discovery.MacAddress.ToString());
+                            if (dev5 == null)
+                            {
+                                dev5 = CreateMagicHomeBlueDevice(discovery, dev, devStatus, deviceClass);
+                            }
+                            else
+                            {
+                                UpdateMagicHomeBlueVsvgPairs(dev5, discovery, dev, devStatus);
+                            }
                         }
                         else
                         {
-                            UpdateMagicHomeWarmWhiteVsvgPairs(dev6, discovery, dev, devStatus);
+                            dev3 = null;
+                            dev4 = null;
+                            dev5 = null;
                         }
-                    }
-                    else
-                    {
-                        dev6 = null;
-                    }
 
-                    if (dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite)
-                    {
-                        dev7 = this.FindDeviceById(discovery.MacAddress + " Cool White", discovery.MacAddress.ToString());
-                        if (dev7 == null)
+
+
+                        if (dev._deviceType == DeviceType.RgbWarmwhite ||
+                            dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb)
                         {
-                            dev7 = CreateMagicHomeCoolWhiteDevice(discovery, dev, devStatus, deviceClass);
+                            dev6 = this.FindDeviceById(discovery.MacAddress + " Warm White",
+                                discovery.MacAddress.ToString());
+                            if (dev6 == null)
+                            {
+                                dev6 = CreateMagicHomeWarmWhiteDevice(discovery, dev, devStatus, deviceClass);
+                            }
+                            else
+                            {
+                                UpdateMagicHomeWarmWhiteVsvgPairs(dev6, discovery, dev, devStatus);
+                            }
                         }
                         else
                         {
-                            UpdateMagicHomeCoolWhiteVsvgPairs(dev7, discovery, dev, devStatus);
+                            dev6 = null;
                         }
-                    }
-                    else
-                    {
-                        dev7 = null;
-                    }
+
+                        if (dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                        {
+                            dev7 = this.FindDeviceById(discovery.MacAddress + " Cool White", discovery.MacAddress.ToString());
+                            if (dev7 == null)
+                            {
+                                dev7 = CreateMagicHomeCoolWhiteDevice(discovery, dev, devStatus, deviceClass);
+                            }
+                            else
+                            {
+                                UpdateMagicHomeCoolWhiteVsvgPairs(dev7, discovery, dev, devStatus);
+                            }
+                        }
+                        else
+                        {
+                            dev7 = null;
+                        }
 
                     
-                    dev8 = this.FindDeviceById(discovery.MacAddress + " Preset", discovery.MacAddress.ToString());
-                    if (dev8 == null)
-                    {
-                        dev8 = CreateMagicHomePresetDevice(discovery, dev, devStatus, deviceClass);
-                    }
-                    else
-                    {
-                        UpdateMagicHomePresetVsvgPairs(dev8, discovery, dev, devStatus);
-                    }
-                    this._mMagicHome.Add(discovery.MacAddress.ToString() ,new MagicHomeApp.MagicHomeDevices()
+                        dev8 = this.FindDeviceById(discovery.MacAddress + " Preset", discovery.MacAddress.ToString());
+                        if (dev8 == null)
                         {
-                            RootDevice = deviceClass,
-                            Mode = dev1,
-                            Colour = dev2,
-                            Red = dev3,
-                            Green = dev4,
-                            Blue = dev5,
-                            WarmWhite = dev6,
-                            CoolWhite = dev7,
-                            Preset = dev8
-                        });
+                            dev8 = CreateMagicHomePresetDevice(discovery, dev, devStatus, deviceClass);
+                        }
+                        else
+                        {
+                            UpdateMagicHomePresetVsvgPairs(dev8, discovery, dev, devStatus);
+                        }
+                        lock (_mUpdateLock)
+                        {
+                            this._mMagicHome.Add(discovery.MacAddress.ToString() ,new MagicHomeApp.MagicHomeDevices()
+                            {
+                                RootDevice = deviceClass,
+                                Mode = dev1,
+                                Colour = dev2,
+                                Red = dev3,
+                                Green = dev4,
+                                Blue = dev5,
+                                WarmWhite = dev6,
+                                CoolWhite = dev7,
+                                Preset = dev8
+                            });
+                        }
+                    }
                 }
 
                 var num = dev1.get_Ref((IHSApplication) null);
@@ -1493,26 +1539,26 @@ namespace HSPI_MagicHome
                 num = dev2.get_Ref((IHSApplication)null);
                 this.MHs.SetDeviceValueByRef(num, (double)ParseHexString(ConvertRgbToHex(devStatus)), true);
                 if (dev._deviceType == DeviceType.Rgb || dev._deviceType == DeviceType.RgbWarmwhite ||
-                    dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite)
+                    dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb)
                 {
-                    num = dev3.get_Ref((IHSApplication)null);
+                    if (dev3 != null) num = dev3.get_Ref((IHSApplication) null);
                     this.MHs.SetDeviceValueByRef(num, (double)devStatus.Red, true);
-                    num = dev4.get_Ref((IHSApplication)null);
+                    if (dev4 != null) num = dev4.get_Ref((IHSApplication) null);
                     this.MHs.SetDeviceValueByRef(num, (double)devStatus.Green, true);
-                    num = dev5.get_Ref((IHSApplication)null);
+                    if (dev5 != null) num = dev5.get_Ref((IHSApplication) null);
                     this.MHs.SetDeviceValueByRef(num, (double)devStatus.Blue, true);
                 }
 
                 if (dev._deviceType == DeviceType.RgbWarmwhite ||
-                    dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite)
+                    dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb)
                 {
-                    num = dev6.get_Ref((IHSApplication)null);
+                    if (dev6 != null) num = dev6.get_Ref((IHSApplication) null);
                     if (devStatus.White1 != null) this.MHs.SetDeviceValueByRef(num, (double) devStatus.White1, true);
                 }
 
-                if (dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite)
+                if (dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite)
                 {
-                    num = dev7.get_Ref((IHSApplication)null);
+                    if (dev7 != null) num = dev7.get_Ref((IHSApplication) null);
                     if (devStatus.White2 != null) this.MHs.SetDeviceValueByRef(num, (double) devStatus.White2, true);
                 }  
                 num = dev8.get_Ref((IHSApplication)null);
@@ -1562,6 +1608,10 @@ namespace HSPI_MagicHome
             return result;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="HexColor"></param>
+        /// <returns></returns>
         internal static ColourRGB ConvertToRgb(string HexColor)
         {
             ColourRGB oColorRgb = new ColourRGB();
@@ -1621,12 +1671,19 @@ namespace HSPI_MagicHome
 
         private int GetDimLevel(DeviceStatus devStatus)
         {
-            var rgbwValues = new List<int>();
-            rgbwValues.Add((int)Math.Round((float)devStatus.Red / (float)255.0 * (float)100.0, MidpointRounding.AwayFromZero));
-            rgbwValues.Add((int)Math.Round((float)devStatus.Green / (float)255.0 * (float)100.0, MidpointRounding.AwayFromZero));
-            rgbwValues.Add((int)Math.Round((float)devStatus.Blue / (float)255.0 * (float)100.0, MidpointRounding.AwayFromZero));
-            rgbwValues.Add((int)Math.Round((float)devStatus.White1 / (float)255.0 * (float)100.0, MidpointRounding.AwayFromZero));
-            rgbwValues.Add((int)Math.Round((float)devStatus.White2 / (float)255.0 * (float)100.0, MidpointRounding.AwayFromZero));
+            var rgbwValues = new List<int>
+            {
+                (int) Math.Round((float) devStatus.Red / (float) 255.0 * (float) 100.0, MidpointRounding.AwayFromZero),
+                (int) Math.Round((float) devStatus.Green / (float) 255.0 * (float) 100.0,
+                    MidpointRounding.AwayFromZero),
+                (int) Math.Round((float) devStatus.Blue / (float) 255.0 * (float) 100.0, MidpointRounding.AwayFromZero)
+            };
+            if (devStatus.White1 != null)
+                rgbwValues.Add((int) Math.Round((float) devStatus.White1 / (float) 255.0 * (float) 100.0,
+                    MidpointRounding.AwayFromZero));
+            if (devStatus.White2 != null)
+                rgbwValues.Add((int) Math.Round((float) devStatus.White2 / (float) 255.0 * (float) 100.0,
+                    MidpointRounding.AwayFromZero));
             return rgbwValues.Max();
         }
 
@@ -1643,6 +1700,13 @@ namespace HSPI_MagicHome
             return str;
         }
 
+        /// <summary>
+        /// </summary>
+        /// <param name="page"></param>
+        /// <param name="data"></param>
+        /// <param name="user"></param>
+        /// <param name="userRights"></param>
+        /// <returns></returns>
         public string PostBackProc(string page, string data, string user, int userRights)
         {
             return PostBackProcPriv(page, data, user, userRights);
@@ -1709,6 +1773,9 @@ namespace HSPI_MagicHome
             return _mConfigPage.postBackProc(page, data, user, userRights);
         }
 
+        /// <summary>
+        /// </summary>
+        /// <returns></returns>
         public static MagicHomeApp GetInstance()
         {
             if (_sObjSingletonInstance == null)
@@ -1728,12 +1795,16 @@ namespace HSPI_MagicHome
             set => _mWillShutDown = value;
         }
 
+        /// <summary>
+        /// </summary>
         public IAppCallbackAPI HsCallback
         {
             get => MHsCallback;
             set => MHsCallback = value;
         }
 
+        /// <summary>
+        /// </summary>
         public string Instance
         {
             get => _mInstance;
@@ -1746,6 +1817,8 @@ namespace HSPI_MagicHome
             }
         }
 
+        /// <summary>
+        /// </summary>
         public string LogLevel
         {
             get => Logger.LogLevel.ToString();
@@ -1758,6 +1831,8 @@ namespace HSPI_MagicHome
             }
         }
 
+        /// <summary>
+        /// </summary>
         public string LogToFile
         {
             get => Logger.LogToFileEnabled.ToString();
@@ -1770,6 +1845,8 @@ namespace HSPI_MagicHome
             }
         }
 
+        /// <summary>
+        /// </summary>
         public void SaveDevPrefToIni(DevIniSetting devIni)
         {
                 MHs.SaveINISetting("MAGICHOME", devIni.Mac, devIni.deviceType.Description(), IniFile);
@@ -1777,6 +1854,8 @@ namespace HSPI_MagicHome
                     "Writing the deviceType for " + devIni.Mac + " to the MagicHome config file " + IniFile);
         }
 
+        /// <summary>
+        /// </summary>
         public DeviceType GetDevPrefFromIni(string mac)
         {
             DeviceType devType;
@@ -1791,6 +1870,8 @@ namespace HSPI_MagicHome
             return devType;
         }
 
+        /// <summary>
+        /// </summary>
         public int SendRecieveTimeout
         {
             get => _mTimeOut;
@@ -1803,6 +1884,8 @@ namespace HSPI_MagicHome
             }
         }
 
+        /// <summary>
+        /// </summary>
         public string LogToFileLevel
         {
             get => Logger.FileLogLevel.ToString();
@@ -1815,16 +1898,22 @@ namespace HSPI_MagicHome
             }
         }
 
+        /// <summary>
+        /// </summary>
         public static string RemoveNonAlphanum(string str)
         {
             return RemoveNonAlphaNumPriv(str);
         }
 
+        /// <summary>
+        /// </summary>
         private static string RemoveNonAlphaNumPriv(string str)
         {
             return new Regex("[^a-zA-Z0-9]").Replace(str, "");
         }
 
+        /// <summary>
+        /// </summary>
         internal DeviceClass FindDeviceById(string id, string MagicHomeId)
         {
             try
@@ -2082,8 +2171,16 @@ namespace HSPI_MagicHome
 
         internal class ColourRGB
         {
+            /// <summary>
+            /// </summary>
             internal byte red { get; set; }
+
+            /// <summary>
+            /// </summary>
             internal byte green { get; set; }
+
+            /// <summary>
+            /// </summary>
             internal byte blue { get; set; }
         }
     }

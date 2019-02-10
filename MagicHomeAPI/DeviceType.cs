@@ -13,6 +13,7 @@ namespace MagicHomeAPI
         [Description("Bulb")]
         Bulb = 3, // V.4+
         [Description("LegacyBulb")]
-        LegacyBulb = 4 // V.3-
+        LegacyBulb = 4, // V.3-
+        [Description("LegacyRgbWarmwhiteCoolwhite")]
+        LegacyRgbWarmwhiteCoolwhite = 5
     }
-}

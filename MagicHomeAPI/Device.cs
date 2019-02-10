@@ -130,8 +130,8 @@ namespace MagicHomeAPI
             if (_deviceType == DeviceType.Rgb && white1Set)
                 throw new InvalidOperationException("device type Rgb doesn't have white1");
 
-            if (_deviceType != DeviceType.RgbWarmwhiteCoolwhite && white2Set)
-                throw new InvalidOperationException("only device type RgbWarmwhiteCoolwhite has white2");
+            if ((_deviceType != DeviceType.RgbWarmwhiteCoolwhite || _deviceType != DeviceType.LegacyRgbWarmwhiteCoolwhite) && white2Set)
+                throw new InvalidOperationException("only device types RgbWarmwhiteCoolwhite & RgbWarmwhiteCoolwhite has white2");
 
             if ((_deviceType == DeviceType.Bulb || _deviceType == DeviceType.LegacyBulb) && rgbSet && white1Set)
                 throw new InvalidOperationException("only rgb or white can be set at once if using bulbs");
@@ -146,6 +146,10 @@ namespace MagicHomeAPI
                     break;
                 case DeviceType.RgbWarmwhiteCoolwhite:
                     message = new byte[] { (byte)(persist ? 0x31 : 0x41), red ?? 0, green ?? 0, blue ?? 0, white1 ?? 0, white2 ?? 0, 0x0f, 0x0f };
+                    sendChecksum = true;
+                    break;
+                case DeviceType.LegacyRgbWarmwhiteCoolwhite:
+                    message = new byte[] { (byte)(persist ? 0x31 : 0x41), red ?? 0, green ?? 0, blue ?? 0, white1 ?? 0, white2 ?? 0, 0xf0, 0x0f };
                     sendChecksum = true;
                     break;
                 case DeviceType.LegacyBulb:
