@@ -149,8 +149,16 @@ namespace MagicHomeAPI
                     sendChecksum = true;
                     break;
                 case DeviceType.LegacyRgbWarmwhiteCoolwhite:
-                    message = new byte[] { (byte)(persist ? 0x31 : 0x41), red ?? 0, green ?? 0, blue ?? 0, white1 ?? 0, white2 ?? 0, 0xf0, 0x0f };
-                    sendChecksum = true;
+                    if (rgbSet)
+                    {
+                        message = new byte[] { (byte)(persist ? 0x31 : 0x41), (byte) red, (byte) green, (byte) blue, white1 ?? 0, white2 ?? 0, 0xf0, 0x0f };
+                        sendChecksum = true;
+                    }
+                    else
+                    {
+                        message = new byte[] { (byte)(persist ? 0x31 : 0x41), 0, 0, 0, white1 ?? 0, white2 ?? 0, 0x0f, 0x0f };
+                        sendChecksum = true;
+                    }
                     break;
                 case DeviceType.LegacyBulb:
                     sendChecksum = false;
