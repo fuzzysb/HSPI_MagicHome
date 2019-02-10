@@ -131,7 +131,7 @@ namespace MagicHomeAPI
                 throw new InvalidOperationException("device type Rgb doesn't have white1");
 
             if ((_deviceType != DeviceType.RgbWarmwhiteCoolwhite || _deviceType != DeviceType.LegacyRgbWarmwhiteCoolwhite) && white2Set)
-                throw new InvalidOperationException("only device types RgbWarmwhiteCoolwhite & RgbWarmwhiteCoolwhite has white2");
+                throw new InvalidOperationException("only device types RgbWarmwhiteCoolwhite & LegacyRgbWarmwhiteCoolwhite has white2");
 
             if ((_deviceType == DeviceType.Bulb || _deviceType == DeviceType.LegacyBulb) && rgbSet && white1Set)
                 throw new InvalidOperationException("only rgb or white can be set at once if using bulbs");
