@@ -130,11 +130,11 @@ namespace MagicHomeAPI
             if (_deviceType == DeviceType.Rgb && white1Set)
                 throw new InvalidOperationException("device type Rgb doesn't have white1");
 
-            if ((_deviceType != DeviceType.RgbWarmwhiteCoolwhite || _deviceType != DeviceType.LegacyRgbWarmwhiteCoolwhite) && white2Set)
+            if ((_deviceType != DeviceType.RgbWarmwhiteCoolwhite && _deviceType != DeviceType.LegacyRgbWarmwhiteCoolwhite) && white2Set)
                 throw new InvalidOperationException("only device types RgbWarmwhiteCoolwhite & LegacyRgbWarmwhiteCoolwhite has white2");
 
-            if ((_deviceType == DeviceType.Bulb || _deviceType == DeviceType.LegacyBulb) && rgbSet && white1Set)
-                throw new InvalidOperationException("only rgb or white can be set at once if using bulbs");
+            if ((_deviceType == DeviceType.Bulb || _deviceType == DeviceType.LegacyBulb) && rgbSet && white1Set || _deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite && rgbSet && (white1Set || white2Set))
+                throw new InvalidOperationException("only rgb or white can be set at once if using bulbs or Legacy controllers");
 
             switch (_deviceType)
             {
@@ -149,16 +149,8 @@ namespace MagicHomeAPI
                     sendChecksum = true;
                     break;
                 case DeviceType.LegacyRgbWarmwhiteCoolwhite:
-                    if (rgbSet)
-                    {
-                        message = new byte[] { (byte)(persist ? 0x31 : 0x41), (byte) red, (byte) green, (byte) blue, white1 ?? 0, white2 ?? 0, 0xf0, 0x0f };
-                        sendChecksum = true;
-                    }
-                    else
-                    {
-                        message = new byte[] { (byte)(persist ? 0x31 : 0x41), 0, 0, 0, white1 ?? 0, white2 ?? 0, 0x0f, 0x0f };
-                        sendChecksum = true;
-                    }
+                    message = new byte[] { (byte)(persist ? 0x31 : 0x41), red ?? 0, green ?? 0, blue ?? 0, white1 ?? 0, white2 ?? 0, (byte)(rgbSet ? 0xf0 : 0x0f), 0x0f };
+                    sendChecksum = true;
                     break;
                 case DeviceType.LegacyBulb:
                     sendChecksum = false;
@@ -167,7 +159,6 @@ namespace MagicHomeAPI
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-
 
             SendMessage(message, sendChecksum, timeOut, false);
 

@@ -469,7 +469,33 @@ namespace HSPI_MagicHome
                                                         "decreasing Device " + devdetail.Mac + "'s Red Value");
                                                     rred = ((int)rred > 0) ? (byte)((int)rred - 1) : rred;
                                                 }
-                                                devdetail.Dev.SetColor((byte)rred, (byte)rgreen, (byte)rblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)rred, (byte)rgreen, (byte)rblue, null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) rred, (byte) rgreen, (byte) rblue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) rwwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) rcwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
+
                                                 Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
@@ -493,7 +519,33 @@ namespace HSPI_MagicHome
                                                         "decreasing Device " + devdetail.Mac + "'s Green Value");
                                                     ggreen = ((int)ggreen > 0) ? (byte)((int)ggreen - 1) : ggreen;
                                                 }
-                                                devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) gred, (byte) ggreen, (byte) gblue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) gwwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) gcwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
+
                                                 Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
@@ -517,7 +569,33 @@ namespace HSPI_MagicHome
                                                         "decreasing Device " + devdetail.Mac + "'s Blue Value");
                                                     bblue = ((int)bblue > 0) ? (byte)((int)bblue - 1) : bblue;
                                                 }
-                                                devdetail.Dev.SetColor((byte)bred, (byte)bgreen, (byte)bblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)bred, (byte)bgreen, (byte)bblue, null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) bred, (byte) bgreen, (byte) bblue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) bwwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) bcwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
+                                                Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
@@ -540,7 +618,33 @@ namespace HSPI_MagicHome
                                                         "decreasing Device " + devdetail.Mac + "'s Warm White Value");
                                                     w1wwhite = ((int)w1wwhite > 0) ? (byte)((int)w1wwhite - 1) : w1wwhite;
                                                 }
-                                                devdetail.Dev.SetColor((byte)w1red, (byte)w1green, (byte)w1blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)w1red, (byte)w1green, (byte)w1blue, null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) w1red, (byte) w1green, (byte) w1blue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) w1wwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) w1cwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
+
                                                 Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
@@ -564,9 +668,34 @@ namespace HSPI_MagicHome
                                                         "decreasing Device " + devdetail.Mac + "'s Cool White Value");
                                                     w2cwhite = ((int)w2cwhite > 0) ? (byte)((int)w2cwhite - 1) : w2cwhite;
                                                 }
-                                                devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) w2red, (byte) w2green, (byte) w2blue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) w2wwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) w2cwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
                                                 Thread.Sleep(1000);
-                                                devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
+                                                    devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                                 return;
                                             case "preset":
@@ -829,7 +958,33 @@ namespace HSPI_MagicHome
                                                 var mcwhite = (devStatus.White2 > 0) ? (mvalDiff >= 0) ? ((((int)devStatus.White2 + mvalDiff) <= 255) ? ((int)devStatus.White2 + mvalDiff) : 255) : ((((int)devStatus.White2 + mvalDiff) >= 0) ? ((int)devStatus.White2 + mvalDiff) : 1) : 0;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s brightness to " + value);
-                                                devdetail.Dev.SetColor((byte)mred, (byte)mgreen, (byte)mblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)mwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)mcwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)mred, (byte)mgreen, (byte)mblue,  null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)mwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)mcwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) mred, (byte) mgreen, (byte) mblue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) mwwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) mcwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
+
                                                 Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
@@ -842,7 +997,34 @@ namespace HSPI_MagicHome
                                                 var ccwhite = devStatus.White2;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Colour to " +hexValue);
-                                                devdetail.Dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) colours.red, (byte) colours.green,
+                                                        (byte) colours.blue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) cwwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) ccwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
+
                                                 Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
@@ -855,7 +1037,33 @@ namespace HSPI_MagicHome
                                                 var rcwhite = devStatus.White2;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Red Value to " + value);
-                                                devdetail.Dev.SetColor((byte)rred, (byte)rgreen, (byte)rblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)rred, (byte)rgreen, (byte)rblue, null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) rred, (byte) rgreen, (byte) rblue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) rwwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) rcwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
+
                                                 Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
@@ -868,7 +1076,33 @@ namespace HSPI_MagicHome
                                                 var gcwhite = devStatus.White2;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Green Value to " + value);
-                                                devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) gred, (byte) ggreen, (byte) gblue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) gwwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) gcwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
+
                                                 Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
@@ -881,7 +1115,33 @@ namespace HSPI_MagicHome
                                                 var bcwhite = devStatus.White2;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Blue Value to " + value);
-                                                devdetail.Dev.SetColor((byte)bred, (byte)bgreen, (byte)bblue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)bred, (byte)bgreen, (byte)bblue, null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) bred, (byte) bgreen, (byte) bblue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) bwwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) bcwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
+
                                                 Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
@@ -894,7 +1154,33 @@ namespace HSPI_MagicHome
                                                 var w1cwhite = devStatus.White2;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Warm White Value to " + value);
-                                                devdetail.Dev.SetColor((byte)w1red, (byte)w1green, (byte)w1blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)w1red, (byte)w1green, (byte)w1blue, null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) w1red, (byte) w1green, (byte) w1blue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) w1wwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) w1cwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
+
                                                 Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
@@ -907,7 +1193,33 @@ namespace HSPI_MagicHome
                                                 var w2cwhite = (byte)value;
                                                 Logger.LogDebug(
                                                     "Setting Device " + devdetail.Mac + "'s Cool White Value to " + value);
-                                                devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true, SendRecieveTimeout);
+                                                if (devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                    devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                {
+                                                    devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, null, null, true, true, SendRecieveTimeout);
+                                                    devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true, SendRecieveTimeout);
+
+                                                }
+                                                else
+                                                {
+                                                    devdetail.Dev.SetColor((byte) w2red, (byte) w2green, (byte) w2blue,
+                                                        (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType == DeviceType.LegacyBulb ||
+                                                         devdetail.Dev._deviceType == DeviceType.Bulb)
+                                                            ? (byte) w2wwhite
+                                                            : (byte?) null,
+                                                        (devdetail.Dev._deviceType ==
+                                                         DeviceType.RgbWarmwhiteCoolwhite ||
+                                                         devdetail.Dev._deviceType ==
+                                                         DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                                                            ? (byte) w2cwhite
+                                                            : (byte?) null, true, true, SendRecieveTimeout);
+                                                }
+
                                                 Thread.Sleep(1000);
                                                 devStatus = devdetail.Dev.GetStatus(SendRecieveTimeout);
                                                 UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);

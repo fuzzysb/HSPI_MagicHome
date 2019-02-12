@@ -330,7 +330,7 @@ namespace HSPI_MagicHome
                                             var colours = MagicHomeApp.ConvertToRgb(colour);
                                             var cwwhite = devStatus.White1;
                                             var ccwhite = devStatus.White2;
-                                            devdetail.Dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true, instance.SendRecieveTimeout);
+                                            devdetail.Dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhite || devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true, instance.SendRecieveTimeout);
                                             devStatus = devdetail.Dev.GetStatus(instance.SendRecieveTimeout);
                                             instance.UpdateMagicHomeDevice(discovery, devdetail.Dev, devStatus);
                                         }

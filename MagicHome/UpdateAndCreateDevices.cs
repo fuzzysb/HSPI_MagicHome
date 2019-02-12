@@ -167,7 +167,7 @@ namespace HSPI_MagicHome
             this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Both)
             {
                 PairType = VSVGPairs.VSVGPairType.Range,
-                RangeStart = 1,
+                RangeStart = 0,
                 RangeEnd = 100,
                 IncludeValues = true,
                 RangeStatusDecimals = 0,
@@ -734,7 +734,7 @@ namespace HSPI_MagicHome
             DeviceClass device = this.CreateDevice(discovery.MacAddress + " Cool White",
                 discovery.MacAddress + " Cool White", discovery.MacAddress.ToString(), true, false, rootDev);
             Logger.LogDebug("Existing Device Not Found Creating Device " + discovery.MacAddress + " in HomeSeer");
-            this.UpdateMagicHomeWarmWhiteVsvgPairs(device, discovery, dev, devStatus);
+            this.UpdateMagicHomeCoolWhiteVsvgPairs(device, discovery, dev, devStatus);
             return device;
         }
 
