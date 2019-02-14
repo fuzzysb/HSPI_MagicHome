@@ -47,6 +47,7 @@ namespace HSPI_MagicHome
         private volatile bool _mWillShutDown;
         private System.Timers.Timer _mPollingTimer;
         private System.Timers.Timer _mDiscoveryTimer;
+        private List<DeviceClass> _hsDevices { get; set; }
         private readonly Dictionary<string, MagicHomeDevices> _mMagicHome = new Dictionary<string, MagicHomeDevices>();
 
         /// <summary>
@@ -1323,6 +1324,7 @@ namespace HSPI_MagicHome
 
         private async Task<bool> UpdateDiscoveredDevices()
         {
+            GetHSDevices();
             var returnValue = false;
             var deviceFindResultsList = new List<DeviceFindResult>();
             try
@@ -1403,6 +1405,10 @@ namespace HSPI_MagicHome
            
         private async Task<bool> UpdateMagicHomeDevices()
         {
+            if (_hsDevices == null)
+            {
+                _hsDevices = GetHSDevices();
+            }
             var returnValue = false;
             DeviceFindResult discResult = null;
             var updatedMagicHomeIds = new List<string>();
@@ -1650,6 +1656,12 @@ namespace HSPI_MagicHome
 
                 if (deviceFindResults.Length == updatedMagicHomeIds.Count)
                 {
+                    var deviceList = GetHSDevices();
+                    if(deviceList.Count != _hsDevices.Count)
+                    {
+                        _hsDevices.Clear();
+                        _hsDevices = deviceList;
+                    }
                     returnValue = true;
                 }
                 else
@@ -2230,14 +2242,12 @@ namespace HSPI_MagicHome
         {
             try
             {
-                var deviceEnumerator = (clsDeviceEnumeration)MHs.GetDeviceEnumerator();
-                if (deviceEnumerator != null)
+                if (_hsDevices != null)
                 {
-                    while (!deviceEnumerator.Finished)
+                    foreach (var deviceClass in _hsDevices)
                     {
-                        var next = deviceEnumerator.GetNext();
-                        if (next.get_Interface(null) == "MagicHome" && GetDeviceId(next, out var MagicHomeId1) == id && MagicHomeId1 == MagicHomeId)
-                            return next;
+                        if (deviceClass.get_Interface(null) == "MagicHome" && GetDeviceId(deviceClass, out var MagicHomeId1) == id && MagicHomeId1 == MagicHomeId)
+                            return deviceClass;
                     }
                 }
             }
@@ -2246,6 +2256,50 @@ namespace HSPI_MagicHome
                 Logger.LogError("FindDeviceByID: " + ex.Message);
                 Logger.LogDebug(ex.ToString());
             }
+            return null;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="MagicHomeId"></param>
+        /// <returns>
+        /// 
+        /// </returns>
+        internal List<DeviceClass> GetHSDevices()
+        {   
+            for (int i = 0; i < 10; i++)
+            {
+                try
+                {
+                    var devList = new List<DeviceClass>();
+                    var deviceEnumerator = (clsDeviceEnumeration)MHs.GetDeviceEnumerator();
+                    if (deviceEnumerator != null)
+                    {
+                        while (!deviceEnumerator.Finished)
+                        {
+                            var next = deviceEnumerator.GetNext();
+                            if (next.get_Interface(null) == "MagicHome")
+                                devList.Add(next);
+                        }
+
+                        return devList;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError("GetHSDevices: " + ex.Message);
+                    Logger.LogDebug(ex.ToString());
+                }
+                
+                if (i == 10)
+                {
+                    Logger.LogError("GetHSDevices: No devices were returned from HomeSeer, this is a HomeSeer bug");
+                    return null;
+                }
+            }
+
             return null;
         }
 

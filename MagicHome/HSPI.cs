@@ -100,7 +100,7 @@ namespace HSPI_MagicHome
                     }
                     else if (current != null)
                     {
-                        if (current.ControlValue > 0)
+                        if (current.ControlValue >= 0)
                         {
                             this._mObjApp.SetControlValue(current.Ref, current.ControlValue);
                         }

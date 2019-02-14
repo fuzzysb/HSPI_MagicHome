@@ -118,7 +118,7 @@ namespace HSPI_MagicHome
             deviceTypeInfo.Device_Type = (int)DeviceTypeInfo_m.DeviceTypeInfo.eDeviceAPI.Plug_In;
             deviceTypeInfo.Device_SubType = (int)DeviceTypeInfo_m.DeviceTypeInfo.eDeviceAPI.No_API;
             device.set_DeviceType_Set(this.MHs, deviceTypeInfo);
-            device.set_Can_Dim(MHs, true);
+            device.set_Can_Dim(MHs, false);
             device.set_Address(MHs, discovery.MacAddress + "-mode");
             var num = device.get_Ref(this.MHs);
             this.MHs.DeviceVSP_ClearAll(num, true);
@@ -143,7 +143,7 @@ namespace HSPI_MagicHome
                 Set_Value = -1
             });
 
-            this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Both)
+            this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Control)
             {
                 PairType = VSVGPairs.VSVGPairType.SingleValue,
                 Status = "Off",
@@ -157,22 +157,23 @@ namespace HSPI_MagicHome
                 ColumnSpan = 0
                 }
             });
+            
             this.MHs.DeviceVGP_AddPair(num, new VSVGPairs.VGPair()
             {
                 PairType = VSVGPairs.VSVGPairType.SingleValue,
                 Graphic = "images/HomeSeer/status/off.gif",
                 Set_Value = 0
             });
-
+            
             this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Both)
             {
                 PairType = VSVGPairs.VSVGPairType.Range,
-                RangeStart = 0,
+                RangeStart = 1,
                 RangeEnd = 100,
                 IncludeValues = true,
                 RangeStatusDecimals = 0,
-                RangeStatusPrefix = "",
-                RangeStatusSuffix = "",
+                RangeStatusPrefix = "Dim ",
+                RangeStatusSuffix = "%",
                 HasScale = false,
                 Render = Enums.CAPIControlType.ValuesRangeSlider,
                 ControlUse = ePairControlUse._Dim,
@@ -267,13 +268,14 @@ namespace HSPI_MagicHome
                     Column = 2,
                     ColumnSpan = 0
                 }
-            });
+            });        
             this.MHs.DeviceVGP_AddPair(num, new VSVGPairs.VGPair()
             {
                 PairType = VSVGPairs.VSVGPairType.SingleValue,
                 Graphic = "images/HomeSeer/status/on.gif",
                 Set_Value = 100
             });
+            
             this.SetDeviceVersion(device, Assembly.GetEntryAssembly().GetName().Version);
         }
 
@@ -415,7 +417,6 @@ namespace HSPI_MagicHome
             this.MHs.DeviceVSP_ClearAll(num, true);
             this.MHs.DeviceVGP_ClearAll(num, true);
             device.set_Address(MHs, discovery.MacAddress + "-red");
-            
             this.MHs.DeviceVSP_AddPair(num, new VSVGPairs.VSPair(ePairStatusControl.Both)
             {
                 PairType = VSVGPairs.VSVGPairType.Range,
@@ -429,6 +430,7 @@ namespace HSPI_MagicHome
                 Render = Enums.CAPIControlType.ValuesRangeSlider,
                 ControlUse = ePairControlUse.Not_Specified,
                 ValueOffset = 0,
+
                 Render_Location = new Enums.CAPIControlLocation()
                 {
                     Row = 1,
