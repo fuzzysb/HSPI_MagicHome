@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Drawing;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using HomeSeerAPI;
 using Scheduler;
 using MagicHomeAPI;
-using Scheduler.Classes;
 
 namespace HSPI_MagicHome
 {

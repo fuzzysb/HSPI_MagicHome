@@ -9,8 +9,9 @@ namespace MagicHomeAPI
         [Description("RgbWarmwhiteCoolwhite")] RgbWarmwhiteCoolwhite = 2,
         [Description("Bulb")] Bulb = 3, // V.4+
         [Description("LegacyBulb")] LegacyBulb = 4, // V.3-
-
         [Description("LegacyRgbWarmwhiteCoolwhite")]
-        LegacyRgbWarmwhiteCoolwhite = 5
+        LegacyRgbWarmwhiteCoolwhite = 5,
+        [Description("LegacyRgb")]
+        LegacyRgb = 6
     }
 }

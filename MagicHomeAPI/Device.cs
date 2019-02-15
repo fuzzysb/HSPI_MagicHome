@@ -36,8 +36,8 @@ namespace MagicHomeAPI
 
                 var response = SendMessage(message, false, timeOut, true);
 
-                if (response.Length <= 11)
-                    throw new Exception("Controller sent wrong number of bytes while getting status, the number of bytes received was " + response.Length + " however we were expecting at least 11 ,the values received were " + PrintByteArray(response));
+                if (response.Length < 12)
+                    throw new Exception("Controller sent wrong number of bytes while getting status, the number of bytes received was " + response.Length + " however we were expecting at 12 ,the values received were " + PrintByteArray(response));
 
 
                 return new DeviceStatus
@@ -51,6 +51,28 @@ namespace MagicHomeAPI
                     Blue = response[8],
                     White1 = response[9],
                     VersionNumber = response[10]
+                };
+            }
+            if (_deviceType == DeviceType.LegacyRgb)
+            {
+                var message = new byte[] { 0xEF, 0x01, 0x77 };
+
+                var response = SendMessage(message, false, timeOut, true);
+
+                if (response.Length < 11)
+                    throw new Exception("Controller sent wrong number of bytes while getting status, the number of bytes received was " + response.Length + " however we were expecting 11 ,the values received were " + PrintByteArray(response));
+
+
+                return new DeviceStatus
+                {
+                    PowerState = (PowerState)response[2],
+                    Mode = response[3] == 0x41 ? PresetMode.NormalRgb : (PresetMode)response[3],
+                    PresetPaused = response[4] == 0x20,
+                    PresetDelay = response[5],
+                    Red = response[6],
+                    Green = response[7],
+                    Blue = response[8],
+                    VersionNumber = response[9]
                 };
             }
             else
@@ -127,8 +149,8 @@ namespace MagicHomeAPI
             if (rgbSet && (!red.HasValue || !green.HasValue || !blue.HasValue))
                 throw new InvalidOperationException("All color values (rgb) must be set");
 
-            if (_deviceType == DeviceType.Rgb && white1Set)
-                throw new InvalidOperationException("device type Rgb doesn't have white1");
+            if ((_deviceType == DeviceType.Rgb || _deviceType == DeviceType.LegacyRgb) && white1Set)
+                throw new InvalidOperationException("device type Rgb or LegacyRgb doesn't have white1");
 
             if ((_deviceType != DeviceType.RgbWarmwhiteCoolwhite && _deviceType != DeviceType.LegacyRgbWarmwhiteCoolwhite) && white2Set)
                 throw new InvalidOperationException("only device types RgbWarmwhiteCoolwhite & LegacyRgbWarmwhiteCoolwhite has white2");
@@ -155,6 +177,10 @@ namespace MagicHomeAPI
                 case DeviceType.LegacyBulb:
                     sendChecksum = false;
                     message = new byte[] { (byte)(persist ? 0x56 : 0x77), red ?? 0, green ?? 0, blue ?? 0, white1 ?? 0, (byte)(rgbSet ? 0xf0 : 0x0f), 0xaa };
+                    break;
+                case DeviceType.LegacyRgb:
+                    sendChecksum = false;
+                    message = new byte[] { (byte)(persist ? 0x56 : 0x77), red ?? 0, green ?? 0, blue ?? 0, 0xaa };
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
