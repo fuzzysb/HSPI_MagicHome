@@ -113,7 +113,7 @@ namespace MagicHomeAPI
 
         public void SetPowerState(PowerState state, int timeOut)
         {
-            if (_deviceType == DeviceType.LegacyBulb)
+            if (_deviceType == DeviceType.LegacyBulb || _deviceType == DeviceType.LegacyRgb)
             {
                 SendMessage(new byte[] { 0xCC, (byte)state, 0x33 }, false, timeOut, false);
 
