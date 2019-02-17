@@ -12,6 +12,9 @@ namespace MagicHomeAPI
         [Description("LegacyRgbWarmwhiteCoolwhite")]
         LegacyRgbWarmwhiteCoolwhite = 5,
         [Description("LegacyRgb")]
-        LegacyRgb = 6
+        LegacyRgb = 6,
+        [Description("WarmwhiteCoolwhite")]
+        WarmwhiteCoolwhite = 7
+
     }
 }

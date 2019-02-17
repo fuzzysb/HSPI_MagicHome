@@ -477,6 +477,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true, SendRecieveTimeout);
 
                                                 }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)rwwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)rcwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
+                                                }
                                                 else
                                                 {
                                                     devdetail.Dev.SetColor((byte) rred, (byte) rgreen, (byte) rblue,
@@ -526,6 +536,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, null, null, true, true, SendRecieveTimeout);
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true, SendRecieveTimeout);
 
+                                                }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)gwwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)gcwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
                                                 }
                                                 else
                                                 {
@@ -577,6 +597,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true, SendRecieveTimeout);
 
                                                 }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)bwwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)bcwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
+                                                }
                                                 else
                                                 {
                                                     devdetail.Dev.SetColor((byte) bred, (byte) bgreen, (byte) bblue,
@@ -625,6 +655,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor((byte)w1red, (byte)w1green, (byte)w1blue, null, null, true, true, SendRecieveTimeout);
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true, SendRecieveTimeout);
 
+                                                }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)w1wwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)w1cwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
                                                 }
                                                 else
                                                 {
@@ -675,6 +715,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, null, null, true, true, SendRecieveTimeout);
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true, SendRecieveTimeout);
 
+                                                }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)w2wwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)w2cwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
                                                 }
                                                 else
                                                 {
@@ -966,6 +1016,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)mwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)mcwhite : (byte?)null, true, true, SendRecieveTimeout);
 
                                                 }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)mwwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)mcwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
+                                                }
                                                 else
                                                 {
                                                     devdetail.Dev.SetColor((byte) mred, (byte) mgreen, (byte) mblue,
@@ -1004,6 +1064,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor((byte)colours.red, (byte)colours.green, (byte)colours.blue, null, null, true, true, SendRecieveTimeout);
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)cwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)ccwhite : (byte?)null, true, true, SendRecieveTimeout);
 
+                                                }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)cwwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)ccwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
                                                 }
                                                 else
                                                 {
@@ -1045,6 +1115,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)rwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)rcwhite : (byte?)null, true, true, SendRecieveTimeout);
 
                                                 }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)rwwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)rcwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
+                                                }
                                                 else
                                                 {
                                                     devdetail.Dev.SetColor((byte) rred, (byte) rgreen, (byte) rblue,
@@ -1083,6 +1163,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor((byte)gred, (byte)ggreen, (byte)gblue, null, null, true, true, SendRecieveTimeout);
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)gwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)gcwhite : (byte?)null, true, true, SendRecieveTimeout);
 
+                                                }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)gwwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)gcwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
                                                 }
                                                 else
                                                 {
@@ -1123,6 +1213,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)bwwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)bcwhite : (byte?)null, true, true, SendRecieveTimeout);
 
                                                 }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)bwwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)bcwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
+                                                }
                                                 else
                                                 {
                                                     devdetail.Dev.SetColor((byte) bred, (byte) bgreen, (byte) bblue,
@@ -1162,6 +1262,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w1wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)w1cwhite : (byte?)null, true, true, SendRecieveTimeout);
 
                                                 }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)w1wwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)w1cwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
+                                                }
                                                 else
                                                 {
                                                     devdetail.Dev.SetColor((byte) w1red, (byte) w1green, (byte) w1blue,
@@ -1200,6 +1310,16 @@ namespace HSPI_MagicHome
                                                     devdetail.Dev.SetColor((byte)w2red, (byte)w2green, (byte)w2blue, null, null, true, true, SendRecieveTimeout);
                                                     devdetail.Dev.SetColor(null, null, null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || devdetail.Dev._deviceType == DeviceType.LegacyBulb || devdetail.Dev._deviceType == DeviceType.Bulb) ? (byte)w2wwhite : (byte?)null, (devdetail.Dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite) ? (byte)w2cwhite : (byte?)null, true, true, SendRecieveTimeout);
 
+                                                }
+                                                else if (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                {
+                                                    devdetail.Dev.SetColor(null, null, null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)w2wwhite
+                                                            : (byte?)null,
+                                                        (devdetail.Dev._deviceType == DeviceType.WarmwhiteCoolwhite)
+                                                            ? (byte)w2cwhite
+                                                            : (byte?)null, true, true, SendRecieveTimeout);
                                                 }
                                                 else
                                                 {
@@ -1804,11 +1924,10 @@ namespace HSPI_MagicHome
                             dev4 = null;
                             dev5 = null;
                         }
-
-
+                        
 
                         if (dev._deviceType == DeviceType.RgbWarmwhite ||
-                            dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb)
+                            dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb || dev._deviceType == DeviceType.WarmwhiteCoolwhite)
                         {
                             dev6 = this.FindDeviceById(discovery.MacAddress + " Warm White",
                                 discovery.MacAddress.ToString());
@@ -1826,7 +1945,7 @@ namespace HSPI_MagicHome
                             dev6 = null;
                         }
 
-                        if (dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                        if (dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.WarmwhiteCoolwhite)
                         {
                             dev7 = this.FindDeviceById(discovery.MacAddress + " Cool White", discovery.MacAddress.ToString());
                             if (dev7 == null)
@@ -1843,16 +1962,24 @@ namespace HSPI_MagicHome
                             dev7 = null;
                         }
 
-                    
-                        dev8 = this.FindDeviceById(discovery.MacAddress + " Preset", discovery.MacAddress.ToString());
-                        if (dev8 == null)
+                        if (dev._deviceType != DeviceType.WarmwhiteCoolwhite)
                         {
-                            dev8 = CreateMagicHomePresetDevice(discovery, dev, devStatus, deviceClass);
+                            dev8 = this.FindDeviceById(discovery.MacAddress + " Preset", discovery.MacAddress.ToString());
+                            if (dev8 == null)
+                            {
+                                dev8 = CreateMagicHomePresetDevice(discovery, dev, devStatus, deviceClass);
+                            }
+                            else
+                            {
+                                UpdateMagicHomePresetVsvgPairs(dev8, discovery, dev, devStatus);
+                            }
                         }
                         else
                         {
-                            UpdateMagicHomePresetVsvgPairs(dev8, discovery, dev, devStatus);
+                            dev8 = null;
                         }
+
+
                         lock (_mUpdateLock)
                         {
                             this._mMagicHome.Add(discovery.MacAddress.ToString() ,new MagicHomeApp.MagicHomeDevices()
@@ -1879,7 +2006,7 @@ namespace HSPI_MagicHome
                     dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite ||
                     dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb)
                 {
-                    if (dev3 != null) num = dev2.get_Ref((IHSApplication)null);
+                    if (dev2 != null) num = dev2.get_Ref((IHSApplication)null);
                     this.MHs.SetDeviceValueByRef(num, (double)ParseHexString(ConvertRgbToHex(devStatus)), true);
                 }
                 
@@ -1895,19 +2022,24 @@ namespace HSPI_MagicHome
                 }
 
                 if (dev._deviceType == DeviceType.RgbWarmwhite ||
-                    dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb)
+                    dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyBulb || dev._deviceType == DeviceType.Bulb || dev._deviceType == DeviceType.WarmwhiteCoolwhite)
                 {
                     if (dev6 != null) num = dev6.get_Ref((IHSApplication) null);
                     if (devStatus.White1 != null) this.MHs.SetDeviceValueByRef(num, (double) devStatus.White1, true);
                 }
 
-                if (dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite)
+                if (dev._deviceType == DeviceType.RgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.LegacyRgbWarmwhiteCoolwhite || dev._deviceType == DeviceType.WarmwhiteCoolwhite)
                 {
                     if (dev7 != null) num = dev7.get_Ref((IHSApplication) null);
                     if (devStatus.White2 != null) this.MHs.SetDeviceValueByRef(num, (double) devStatus.White2, true);
-                }  
-                num = dev8.get_Ref((IHSApplication)null);
-                this.MHs.SetDeviceValueByRef(num, (double)devStatus.Mode, true);
+                }
+
+                if (dev._deviceType != DeviceType.WarmwhiteCoolwhite)
+                {
+                    if (dev8 != null) num = dev8.get_Ref((IHSApplication)null);
+                    this.MHs.SetDeviceValueByRef(num, (double)devStatus.Mode, true);
+                }
+                
 
                 var devDetail = new DevDetail()
                 {
