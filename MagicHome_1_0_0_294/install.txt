@@ -9,3 +9,4 @@ Hspi.dll,.\bin\MagicHome,0
 System.Reflection.TypeExtensions.dll,.\bin\MagicHome,0
 System.ValueTuple.dll,.\bin\MagicHome,0
 System.Net.IPNetwork.dll,.\bin\MagicHome,0
+images.zip,[UNZIPOVER],.\html\images\MagicHome

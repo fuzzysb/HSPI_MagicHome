@@ -104,7 +104,7 @@ namespace HSPI_MagicHome
                     var jqDropList3 = new clsJQuery.jqDropList("preset_" + str1, m_pageName, true);
                     jqDropList3.AddItem("--Please Select--", "-1", false);
 
-                    var jqSpeedSlider4 = new clsJQuery.jqSlider("speed_" + str1, 1, 100, (str5 != null)? int.Parse(str5) : 50, clsJQuery.jqSlider.jqSliderOrientation.horizontal, 150, m_pageName, true ); 
+                    var jqSpeedSlider4 = new clsJQuery.jqSlider("speed_" + str1, 1, 100, (!string.IsNullOrEmpty(str5))? int.Parse(str5) : 50, clsJQuery.jqSlider.jqSliderOrientation.horizontal, 150, m_pageName, true ); 
 
                     if (MagicHomeApp.deviceFindResults != null)
                     {
